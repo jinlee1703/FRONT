@@ -3,17 +3,21 @@ package com.wefood.front.user.adaptor;
 
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
+import com.wefood.front.user.dto.request.AddressRequest;
 import com.wefood.front.user.dto.request.LoginRequest;
 import com.wefood.front.user.dto.request.SignRequest;
 import com.wefood.front.user.dto.request.UserGetRequest;
+import com.wefood.front.user.dto.response.AddressResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
 import com.wefood.front.user.dto.response.UserGetResponse;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 
 @Component
@@ -57,8 +61,24 @@ public class UserAdaptor {
                 new ParameterizedTypeReference<>() {
                 }
         );
+        return responseEntity.getBody().getData();
+    }
+
+    public AddressResponse findAddress(Long userId) {
+
+        ResponseEntity<Message<AddressResponse>> responseEntity = restTemplate.exchange(
+                backAdaptorProperties.getAddress() + URL + "/address/{id}",
+                GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }, userId
+        );
 
         return responseEntity.getBody().getData();
+    }
+
+    public void createAddress(AddressRequest addressRequest, String  id) {
+        restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/{id}/address", addressRequest, Void.class, id);
     }
 
 }
