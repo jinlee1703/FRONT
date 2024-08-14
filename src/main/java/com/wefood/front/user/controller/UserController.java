@@ -3,11 +3,15 @@ package com.wefood.front.user.controller;
 import com.wefood.front.user.adaptor.UserAdaptor;
 import com.wefood.front.user.dto.request.LoginRequest;
 import com.wefood.front.user.dto.request.SignRequest;
+import com.wefood.front.user.dto.request.UserGetRequest;
 import com.wefood.front.user.dto.response.LoginResponse;
+import com.wefood.front.user.dto.response.UserGetResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,9 +51,9 @@ public class UserController {
             response.addCookie(passwordCookie);
 
             Cookie isSellerCookie;
-            if(loginResponse.isSeller()){
+            if (loginResponse.isSeller()) {
                 isSellerCookie = new Cookie("isSeller", "true"); // 쿠키 이름과 값 설정
-            }else{
+            } else {
                 isSellerCookie = new Cookie("isSeller", "false"); // 쿠키 이름과 값 설정
             }
 
@@ -75,6 +79,18 @@ public class UserController {
 
         userAdaptor.signUp(signRequest);
         return "redirect:/";
+    }
+
+    @GetMapping("/mypage")
+    public String myPage(@CookieValue(name = "password", required = false) String password, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, Model model) {
+
+        if (Objects.isNull(password)) {
+            return "redirect:/login?auth=false";
+        }
+
+        UserGetResponse userGetResponse = userAdaptor.findUser(new UserGetRequest(phoneNumber, password));
+        model.addAttribute("user", userGetResponse);
+        return "my-page";
     }
 
 }

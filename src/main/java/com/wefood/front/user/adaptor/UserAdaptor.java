@@ -5,7 +5,9 @@ import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
 import com.wefood.front.user.dto.request.LoginRequest;
 import com.wefood.front.user.dto.request.SignRequest;
+import com.wefood.front.user.dto.request.UserGetRequest;
 import com.wefood.front.user.dto.response.LoginResponse;
+import com.wefood.front.user.dto.response.UserGetResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -36,9 +38,24 @@ public class UserAdaptor {
 
         ResponseEntity<Message<LoginResponse>> responseEntity = restTemplate.exchange(
                 backAdaptorProperties.getAddress() + URL + "/login",
-                HttpMethod.POST,
+                POST,
                 new HttpEntity<>(loginRequest),
-                new ParameterizedTypeReference<Message<LoginResponse>>() {}
+                new ParameterizedTypeReference<>() {
+                }
+        );
+
+        return responseEntity.getBody().getData();
+    }
+
+    public UserGetResponse findUser(UserGetRequest userGetRequest) {
+
+
+        ResponseEntity<Message<UserGetResponse>> responseEntity = restTemplate.exchange(
+                backAdaptorProperties.getAddress() + URL + "/mypage",
+                POST,
+                new HttpEntity<>(userGetRequest),
+                new ParameterizedTypeReference<>() {
+                }
         );
 
         return responseEntity.getBody().getData();
