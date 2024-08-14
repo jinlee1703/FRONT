@@ -7,6 +7,7 @@ import com.wefood.front.user.dto.request.LoginRequest;
 import com.wefood.front.user.dto.request.SignRequest;
 import com.wefood.front.user.dto.response.LoginResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -33,8 +34,14 @@ public class UserAdaptor {
 
     public LoginResponse login(LoginRequest loginRequest) {
 
-        ResponseEntity<Message> responseEntity = restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/login", loginRequest, Message.class);
-        return (LoginResponse) responseEntity.getBody().getData();
+        ResponseEntity<Message<LoginResponse>> responseEntity = restTemplate.exchange(
+                backAdaptorProperties.getAddress() + URL + "/login",
+                HttpMethod.POST,
+                new HttpEntity<>(loginRequest),
+                new ParameterizedTypeReference<Message<LoginResponse>>() {}
+        );
+
+        return responseEntity.getBody().getData();
     }
 
 }
