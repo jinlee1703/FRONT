@@ -2,6 +2,7 @@ package com.wefood.front.user.adaptor;
 
 
 import com.wefood.front.config.BackAdaptorProperties;
+import com.wefood.front.global.Message;
 import com.wefood.front.user.dto.request.LoginRequest;
 import com.wefood.front.user.dto.request.SignRequest;
 import com.wefood.front.user.dto.response.LoginResponse;
@@ -32,8 +33,8 @@ public class UserAdaptor {
 
     public LoginResponse login(LoginRequest loginRequest) {
 
-        ResponseEntity<LoginResponse> responseEntity = restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/login", loginRequest, LoginResponse.class);
-        return responseEntity.getBody();
+        ResponseEntity<Message> responseEntity = restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/login", loginRequest, Message.class);
+        return (LoginResponse) responseEntity.getBody().getData();
     }
 
 }
