@@ -97,69 +97,48 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-10 ftco-animate">
-                <form action="/sign" method="POST" class="billing-form">
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="firstname">이름</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="">
-                            </div>
-                        </div>
+            <div class="col-xl-8 ftco-animate">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">회원가입</h3>
                     </div>
-
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
+                    <div class="card-body">
+                        <form action="/sign" method="POST" class="billing-form">
+                            <div class="form-group">
+                                <label for="name">이름</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요" required>
+                            </div>
                             <div class="form-group">
                                 <label for="phoneNumber">전화번호</label>
-                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="-없이 입력해주세요 01012345678">
+                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="01012345678 형식으로 입력하세요" required>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="password">비밀번호</label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="">
+                                <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요" required>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="isSeller">판매자유무</label>
+                                <label for="isSeller">판매자 여부</label>
                                 <select id="isSeller" name="isSeller" class="form-control">
                                     <option value="yes">예</option>
                                     <option value="no">아니요</option>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="accountNumber">계좌번호</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="">
+                                <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력하세요" required>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- 제출 버튼 -->
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">제출</button>
+                                <button type="submit" class="btn btn-primary btn-block">제출</button>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                </form><!-- END -->
+                </div>
             </div>
-        </div> <!-- .col-md-8 -->
+        </div>
     </div>
 </section> <!-- .section -->
+
+
 
 
 
