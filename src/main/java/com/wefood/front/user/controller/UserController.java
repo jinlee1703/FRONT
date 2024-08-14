@@ -20,11 +20,6 @@ public class UserController {
 
     private final UserAdaptor userAdaptor;
 
-    @GetMapping
-    public String index() {
-        return "index";
-    }
-
     @GetMapping("/login")
     public String loginForm() {
         return "login";
