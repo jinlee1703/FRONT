@@ -80,6 +80,7 @@ public class ProductAdaptor {
                 .queryParam("searchWord", searchWord)
                 .queryParam("page", page)
                 .queryParam("size", size)
+                .encode()
                 .build()
                 .toUri();
         ResponseEntity<Message<PageRequest<ProductResponse>>> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {

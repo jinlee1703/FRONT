@@ -66,11 +66,15 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String search(@ModelAttribute(name = "searchWord") String searchWord, Model model, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, @CookieValue(name = "id") String cookie) {
+    public String search(@ModelAttribute(name = "search_word") String searchWord, Model model, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, @CookieValue(name = "id", required = false) String cookie) {
         if (cookie != null) {
             model.addAttribute("login", "Y");
         }
-        productService.getProductsBySearch(searchWord, page, size);
+        PageRequest<ProductResponse> productsBySearch = productService.getProductsBySearch(searchWord, page, size);
+
+        model.addAttribute("search", searchWord);
+        model.addAttribute("products", productsBySearch);
+        model.addAttribute("page", page);
         return "/shop";
     }
 
