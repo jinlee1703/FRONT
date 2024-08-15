@@ -488,6 +488,8 @@ mark,
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
     max-width: 100%;
+    min-height: 250px;
+    object-fit: cover;
     height: auto;
 }
 
@@ -14979,6 +14981,7 @@ textarea.form-control {
     transition: background-color 0.3s;
     width: 100px;
 }
+
 .search-input,
 .search-button {
     box-sizing: border-box;
@@ -14993,6 +14996,7 @@ textarea.form-control {
     height: auto;
     max-width: 250px;
 }
+
 @media (max-width: 768px) {
     .logo-img {
         max-width: 160px;
@@ -15004,10 +15008,12 @@ textarea.form-control {
     justify-content: end;
     padding: 10px 0;
 }
+
 .user-head > a {
     margin-right: 20px;
     color: #000;
 }
+
 a:hover {
     text-underline: #1c7430;
 }
@@ -15015,6 +15021,23 @@ a:hover {
 .category-active {
     color: #1c7430;
 }
+
 .category-inactive {
     color: #000;
+}
+
+.thumbnail-wrapper {
+    width: 100%;
+    height: 0;
+    padding-top: 75%;
+    overflow: hidden;
+    position: relative;
+}
+
+.thumbnail-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
 }
