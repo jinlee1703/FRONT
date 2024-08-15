@@ -1,5 +1,6 @@
 package com.wefood.front.product.adaptor;
 
+import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
 import com.wefood.front.global.PageRequest;
 import com.wefood.front.product.dto.ProductDetailResponse;
@@ -18,16 +19,23 @@ import java.util.List;
 public class ProductAdaptor {
 
     private final RestTemplate restTemplate;
+    private final BackAdaptorProperties backAdaptorProperties;
+    private static final String productURL = "/api/product";
 
-    public ProductAdaptor(RestTemplate restTemplate) {
+    public ProductAdaptor(RestTemplate restTemplate, BackAdaptorProperties backAdaptorProperties) {
         this.restTemplate = restTemplate;
+        this.backAdaptorProperties = backAdaptorProperties;
     }
 
     public Message<ProductDetailResponse> getProductDetail(Long productId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        ResponseEntity<Message<ProductDetailResponse>> exchange = restTemplate.exchange("http://localhost:8081/api/product/" + productId, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
+        URI uri = UriComponentsBuilder.fromUriString(backAdaptorProperties.getAddress())
+                .path(productURL)
+                .path("/{productId}")
+                .buildAndExpand(productId)
+                .toUri();
+        ResponseEntity<Message<ProductDetailResponse>> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
         });
 
         return exchange.getBody();
@@ -36,7 +44,10 @@ public class ProductAdaptor {
     public Message<List<ProductResponse>> getProducts() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        ResponseEntity<Message<List<ProductResponse>>> exchange = restTemplate.exchange("http://localhost:8081/api/product", HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
+        URI uri = UriComponentsBuilder.fromUriString(backAdaptorProperties.getAddress())
+                .path(productURL)
+                .build().toUri();
+        ResponseEntity<Message<List<ProductResponse>>> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
         });
 
         return exchange.getBody();
@@ -46,8 +57,9 @@ public class ProductAdaptor {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         URI uri = UriComponentsBuilder.
-                fromUriString("http://localhost:8081/api/product/category")
-                .path("/{categoryId}")
+                fromUriString(backAdaptorProperties.getAddress())
+                .path(productURL)
+                .path("/category/{categoryId}")
                 .queryParam("page", page)
                 .queryParam("size", size)
                 .build()
@@ -62,7 +74,9 @@ public class ProductAdaptor {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         URI uri = UriComponentsBuilder.
-                fromUriString("http://localhost:8081/api/product/search")
+                fromUriString(backAdaptorProperties.getAddress())
+                .path(productURL)
+                .path("/search")
                 .queryParam("searchWord", searchWord)
                 .queryParam("page", page)
                 .queryParam("size", size)
