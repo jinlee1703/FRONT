@@ -102,7 +102,7 @@
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
           await widgets.requestPayment({
             orderId: generateRandomString(),
-            orderName: "이정범 장민주 바보",
+            orderName: "주문",
             successUrl: window.location.origin + "/success",
             failUrl: window.location.origin + "/fail",
             customerEmail: "customer123@gmail.com",
