@@ -31,8 +31,6 @@ public class ProductController {
         Cookie[] cookies = request.getCookies();
         if (cookies.length > 1) {
             model.addAttribute("login", "Y");
-        } else {
-            model.addAttribute("login", "N");
         }
         List<ProductResponse> products = productService.getProducts();
         model.addAttribute("products", products);
@@ -44,15 +42,13 @@ public class ProductController {
         Cookie[] cookies = request.getCookies();
         if (cookies.length > 1) {
             model.addAttribute("login", "Y");
-        } else {
-            model.addAttribute("login", "N");
         }
 
         PageRequest<ProductResponse> productsByCategory = productService.getProductsByCategory(categoryId, page, size);
         model.addAttribute("products", productsByCategory);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("page", page);
-        System.out.println(page);
+
         return "/shop";
     }
 
@@ -61,8 +57,6 @@ public class ProductController {
         Cookie[] cookies = request.getCookies();
         if (cookies.length > 1) {
             model.addAttribute("login", "Y");
-        } else {
-            model.addAttribute("login", "N");
         }
 
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
