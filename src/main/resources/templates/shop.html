@@ -42,7 +42,7 @@
 <div class="container" style="display: flex; justify-content: space-between; align-items: center">
     <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" class="logo-img"></a>
     <form action="/search" class="search-container" style="height: 100%">
-        <input class="search-input" type="text" placeholder="">
+        <input class="search-input" name="search_word" type="text" placeholder="">
         <button class="search-button" type="submit">검색</button>
     </form>
 </div>
@@ -86,6 +86,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-lg-10 order-md-last">
+                <div th:if="${search}">
+                    <h2 th:text="'\''+${search}+'\' 검색 결과'"></h2>
+                </div>
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex" th:each="product: ${products.content}">
                         <div class="product d-flex flex-column">
