@@ -5,14 +5,9 @@ import com.wefood.front.product.dto.ProductDetailResponse;
 import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.ProductResponse;
 import com.wefood.front.product.service.ProductService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +22,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public String index(Model model, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length > 1) {
+    public String index(Model model, @CookieValue(name = "id", required = false) String cookie) {
+        if (cookie != null) {
             model.addAttribute("login", "Y");
         }
         List<ProductResponse> products = productService.getProducts();
@@ -38,9 +32,8 @@ public class ProductController {
     }
 
     @GetMapping("/search/category/{categoryId}")
-    public String searchCategory(@PathVariable(name = "categoryId") Long categoryId, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, Model model, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length > 1) {
+    public String searchCategory(@PathVariable(name = "categoryId") Long categoryId, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, Model model, @CookieValue(name = "id", required = false) String cookie) {
+        if (cookie != null) {
             model.addAttribute("login", "Y");
         }
 
@@ -53,9 +46,8 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies.length > 1) {
+    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "id", required = false) String cookie) {
+        if (cookie != null) {
             model.addAttribute("login", "Y");
         }
 
@@ -74,7 +66,10 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String search(@ModelAttribute(name = "searchWord") String searchWord, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size) {
+    public String search(@ModelAttribute(name = "searchWord") String searchWord, Model model, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, @CookieValue(name = "id") String cookie) {
+        if (cookie != null) {
+            model.addAttribute("login", "Y");
+        }
         productService.getProductsBySearch(searchWord, page, size);
         return "/shop";
     }
