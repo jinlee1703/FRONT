@@ -5029,7 +5029,7 @@ input[type="button"].btn-block {
 }
 
 .navbar-dark .navbar-nav .nav-link {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus {
@@ -11454,7 +11454,7 @@ h1, h2, h3, h4, h5,
 }
 
 .ftco-navbar-light {
-    background: transparent !important;
+    background: #1c7430 !important;
     /*position: absolute;*/
     top: 20px;
     left: 0;
@@ -11507,7 +11507,7 @@ h1, h2, h3, h4, h5,
     padding-left: 20px;
     padding-right: 20px;
     font-weight: 400;
-    color: #000000;
+    /*color: #000000;*/
     text-transform: uppercase;
     letter-spacing: 2px;
     opacity: 1 !important;
@@ -11583,7 +11583,7 @@ h1, h2, h3, h4, h5,
 }
 
 .ftco-navbar-light .navbar-nav > .nav-item.cta > a {
-    color: #000000;
+    /*color: #000000;*/
 }
 
 @media (max-width: 767.98px) {
