@@ -107,10 +107,10 @@
         <div class="row mb-5">
             <div class="col-lg-6 ftco-animate">
                 <a th:href="${thumbnail}" class="image-popup prod-img-bg">
-                    <img th:src="${thumbnail}" class="img-fluid" alt="product image"></a>
+                    <img th:src="${thumbnail}" class="img-fluid" alt="product image" id="thumbnail"></a>
             </div>
             <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                <h3 th:text="${product.name}"></h3>
+                <h3 th:text="${product.name}" id="name"></h3>
                 <div class="rating d-flex">
                     <p class="text-left mr-4">
                         <a href="#" class="mr-2">5.0</a>
@@ -122,7 +122,7 @@
                     </p>
                 </div>
                 <p class="price" style="display: flex; justify-content: end;">
-                    <span th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}+원"></span>
+                    <span th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}+원" id="price"></span>
                 </p>
                 <div style="height: 20%">
 
@@ -147,8 +147,8 @@
                 </div>
                 <p style="display: flex; justify-content: space-around; font-size: 16px; align-items: center">
                     <i class="fa-regular fa-heart" style="font-size: 30px;"></i>
-                    <a href="/cart" class="btn btn-black py-3 px-5 mr-2" style="font-size: inherit">장바구니에 넣기</a>
-                    <a href="cart.html" class="btn btn-primary py-3 px-5" style="font-size: inherit;">바로 구매</a>
+                    <button id="put-cart" class="btn btn-black py-3 px-5 mr-2" style="font-size: inherit" th:data-product-id="${product.id}">장바구니에 넣기</button>
+                    <button id="buy" class="btn btn-primary py-3 px-5" style="font-size: inherit;">바로 구매</button>
                 </p>
             </div>
         </div>
@@ -436,7 +436,7 @@
     </svg>
 </div>
 
-
+<script src="/js/cart.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-migrate-3.0.1.min.js"></script>
 <script src="/js/popper.min.js"></script>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Minishop - Free Bootstrap 4 Template by Colorlib</title>
+    <title>우리음식 :: 농가와 소비자를 잇다</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -82,60 +82,43 @@
                         <tr class="text-center">
                             <th>&nbsp;</th>
                             <th>&nbsp;</th>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
+                            <th>상품</th>
+                            <th>가격</th>
+                            <th>수량</th>
+                            <th>합계</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="text-center">
-                            <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
+                        <tr class="text-center" th:each="product: ${products}">
+                            <td class="product-remove">
+                                <input type="checkbox" checked>
+                            </td>
 
                             <td class="image-prod">
-                                <div class="img" style="background-image:url(/images/product-3.jpg);"></div>
+                                <div class="img" th:style="'background-image:url(' + ${product.thumbnail} + ');'"></div>
                             </td>
 
                             <td class="product-name">
-                                <h3>Nike Free RN 2019 iD</h3>
-                                <p>Far far away, behind the word mountains, far from the countries</p>
+                                <a th:href="'/'+${product.id}">
+                                    <h3 th:text="${product.name}"></h3>
+                                </a>
+                                <a href="#">
+                                    <span class="ion-ios-close"></span>
+                                </a>
                             </td>
 
-                            <td class="price">$4.90</td>
+                            <td class="price" th:text="${product.price}"></td>
 
-                            <td class="quantity">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="quantity" class="quantity form-control input-number"
-                                           value="1" min="1" max="100">
-                                </div>
+                            <td class="quantity" th:text="${product.quantity}">
+<!--                                <div class="input-group mb-3">-->
+<!--                                    <input type="text" name="quantity" class="quantity form-control input-number"-->
+<!--                                           th:value="${product.quantity}" min="1" max="100">-->
+<!--                                </div>-->
                             </td>
 
-                            <td class="total">$4.90</td>
+                            <td class="total" th:text="${product.quantity}*${product.price}"></td>
                         </tr><!-- END TR-->
 
-                        <tr class="text-center">
-                            <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-
-                            <td class="image-prod">
-                                <div class="img" style="background-image:url(/images/product-4.jpg);"></div>
-                            </td>
-
-                            <td class="product-name">
-                                <h3>Nike Free RN 2019 iD</h3>
-                                <p>Far far away, behind the word mountains, far from the countries</p>
-                            </td>
-
-                            <td class="price">$15.70</td>
-
-                            <td class="quantity">
-                                <div class="input-group mb-3">
-                                    <input type="text" name="quantity" class="quantity form-control input-number"
-                                           value="1" min="1" max="100">
-                                </div>
-                            </td>
-
-                            <td class="total">$15.70</td>
-                        </tr><!-- END TR-->
                         </tbody>
                     </table>
                 </div>
