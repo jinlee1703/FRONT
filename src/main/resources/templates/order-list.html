@@ -100,7 +100,7 @@
                             <td th:text="${order.receiverName}"></td>
                             <td th:text="${order.receiverPhoneNumber}"></td>
                             <td th:text="${order.deliveryDate}"></td>
-                            <td th:text="${order.meetingAt}"></td>
+                            <td th:text="${#temporals.format(order.meetingAt, 'yyyy-MM-dd HH:mm')}"></td>
                             <td>
                                 <a th:href="@{/order(id=${order.id})}" class="btn btn-primary btn-sm">상세보기</a>
                             </td>
