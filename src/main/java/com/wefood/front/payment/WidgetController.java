@@ -8,16 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.Base64;
 
 @Controller
@@ -27,6 +25,7 @@ public class WidgetController {
 
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
+
 
         JSONParser parser = new JSONParser();
         String orderId;
@@ -88,18 +87,52 @@ public class WidgetController {
     /**
      * 인증성공처리
      *
-     * @param request
-     * @param model
      * @return
      * @throws Exception
      */
     @RequestMapping(value = "/success", method = RequestMethod.GET)
-    public String paymentRequest(HttpServletRequest request, Model model) throws Exception {
+    public String paymentRequest(@RequestParam String invoiceNumber,
+                                 @RequestParam String receiverName,
+                                 @RequestParam String receiverPhone,
+                                 @RequestParam String receiverAddress,
+                                 @RequestParam String amountValue,
+                                 @RequestParam (required = false) String meetingAt,
+                                 @RequestParam (required = false)String deliveryDate) throws Exception {
+
+        System.out.println("@@@");
+        System.out.println(meetingAt);
+        System.out.println(deliveryDate);
+
+
+        // todo 값 안넣어주면 공백이 나옴 , 이걸로 직거랜지 아닌지 구분하면 될 듯
+        // todo 이거 가지고 order만들어
+        // todo 장바구니에있는 쿠기 가지고 orderDetail만들어
+        // todo 장바구니 쿠키 지워버려
+        // todo 그럼 결제완료 -> 주문생성 -> 주문디테일까지 완료
         return "/success";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    public String tosspay(HttpServletRequest request, Model model) throws Exception {
+    public String tosspay(@RequestParam String invoiceNumber,
+                          @RequestParam String receiverName,
+                          @RequestParam String receiverPhone,
+                          @RequestParam String receiverAddress,
+                          @RequestParam String amountValue,
+                          @RequestParam (required = false) String meetingAt,
+                          @RequestParam (required = false)String deliveryDate,
+                          Model model) throws Exception {
+
+        // todo 송장번호 , 받는 사람 , 받는 주소 , 받는 전번 , 직거래 날짜
+        // todo 장바구니에서 상품들 긁어와서 바로 결제 떄리기
+        // todo 해당하는 가격들 합산해서 amountValue에 넣어주기
+
+        model.addAttribute("amountValue", amountValue);
+        model.addAttribute("invoiceNumber", invoiceNumber);
+        model.addAttribute("receiverName", receiverName);
+        model.addAttribute("receiverPhone", receiverPhone);
+        model.addAttribute("receiverAddress", receiverAddress);
+        model.addAttribute("meetingAt", meetingAt);
+        model.addAttribute("deliveryDate", deliveryDate);
         return "tosspay";
     }
 

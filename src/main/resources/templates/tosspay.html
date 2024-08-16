@@ -27,6 +27,19 @@
 <!--            >-->
 <!--          </div>-->
 <!--        </div>-->
+
+
+
+        <div>
+          <input type="hidden" id="amount-input" name="amountValue" th:value="${amountValue}" />
+          <input type="hidden" id="invoiceNumber" name="invoiceNumber" th:value="${invoiceNumber}" />
+          <input type="hidden" id="receiverName" name="receiverName" th:value="${receiverName}" />
+          <input type="hidden" id="receiverPhone" name="receiverPhone" th:value="${receiverPhone}" />
+          <input type="hidden" id="receiverAddress" name="receiverAddress" th:value="${receiverAddress}" />
+          <input type="hidden" id="meetingAt" name="meetingAt" th:value="${meetingAt}" />
+          <input type="hidden" id="deliveryDate" name="deliveryDate" th:value="${deliveryDate}" />
+        </div>
+
         <!-- 결제하기 버튼 -->
         <div class="result wrapper">
           <button class="button" id="payment-button" style="margin-top: 30px">
@@ -39,10 +52,28 @@
 
       async function main() {
         const button = document.getElementById("payment-button");
+        const amountInput = document.getElementById("amount-input");
+        const invoiceNumber = document.getElementById("invoiceNumber");
+        const receiverName = document.getElementById("receiverName");
+        const receiverPhone = document.getElementById("receiverPhone");
+        const receiverAddress = document.getElementById("receiverAddress");
+        const meetingAt = document.getElementById("meetingAt");
+        const deliveryDate = document.getElementById("deliveryDate");
+
+        // 콘솔 로그로 각 값 출력 (필요한 경우 삭제 가능)
+        console.log("Amount Value:", amountInput.value);
+        console.log("Invoice Number:", invoiceNumber.value);
+        console.log("Receiver Name:", receiverName.value);
+        console.log("Receiver Phone:", receiverPhone.value);
+        console.log("Receiver Address:", receiverAddress.value);
+        console.log("Meeting At:", meetingAt.value);
+        console.log("Delivery Date:", deliveryDate.value);
+
         // const coupon = document.getElementById("coupon-box");
+        // 사용자가 입력한 금액을 기반으로 amount 설정
         const amount = {
           currency: "KRW",
-          value: 50000, // todo 이 부분은 내가 값 합산해서 넣어줘야 함
+          value: parseInt(amountInput.value, 10), // 입력된 금액을 정수로 변환하여 설정
         };
         // ------  결제위젯 초기화 ------
         // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -100,10 +131,21 @@
         button.addEventListener("click", async function () {
           // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+
+
+          const successUrl = window.location.origin + "/success" +
+                  "?invoiceNumber=" + encodeURIComponent(invoiceNumber.value) +
+                  "&amountValue=" + encodeURIComponent(amountInput.value) +
+                  "&receiverName=" + encodeURIComponent(receiverName.value) +
+                  "&receiverPhone=" + encodeURIComponent(receiverPhone.value) +
+                  "&receiverAddress=" + encodeURIComponent(receiverAddress.value) +
+                  "&meetingAt=" + encodeURIComponent(meetingAt.value) +
+                  "&deliveryDate=" + encodeURIComponent(deliveryDate.value);
+
           await widgets.requestPayment({
             orderId: generateRandomString(),
             orderName: "주문",
-            successUrl: window.location.origin + "/success",
+            successUrl: successUrl,
             failUrl: window.location.origin + "/fail",
             customerEmail: "customer123@gmail.com",
             customerName: "김토스",
