@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,15 +25,17 @@ public class CartController {
 
     @GetMapping
     public String getCart(Model model, @CookieValue(name = "id", required = false) Long userId, @CookieValue(name = "cart", required = false) String cart) {
-        List<CartResponse> farms;
+        if (cart != null) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                farms = objectMapper.readValue(cart, new TypeReference<>() {});
+                List<CartResponse> farms = objectMapper.readValue(cart, new TypeReference<>() {
+                });
+                model.addAttribute("farms", farms);
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+        }
 
-        model.addAttribute("farms", farms);
         return "/cart";
     }
 
