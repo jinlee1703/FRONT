@@ -3,7 +3,7 @@ package com.wefood.front.order.adaptor;
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
 import com.wefood.front.order.dto.CartProductRequest;
-import com.wefood.front.order.dto.CartProductResponse;
+import com.wefood.front.order.dto.CartResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class CartAdaptor {
         this.restTemplate = restTemplate;
     }
 
-    public Message<List<CartProductResponse>> getCartProduct(Long userId) {
+    public Message<List<CartResponse>> getCartProduct(Long userId) {
         URI uri = UriComponentsBuilder
                 .fromUriString(backAdaptorProperties.getAddress())
                 .path(URL)
@@ -33,7 +33,7 @@ public class CartAdaptor {
                 .build().toUri();
 
         HttpHeaders headers = new HttpHeaders();
-        ResponseEntity<Message<List<CartProductResponse>>> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
+        ResponseEntity<Message<List<CartResponse>>> exchange = restTemplate.exchange(uri, HttpMethod.GET, new HttpEntity<>(headers), new ParameterizedTypeReference<>() {
         });
 
         return exchange.getBody();
