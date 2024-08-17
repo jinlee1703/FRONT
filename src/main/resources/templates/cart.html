@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>우리음식 :: 농가와 소비자를 잇다</title>
     <meta charset="utf-8">
@@ -95,7 +95,7 @@
                                 <tbody>
                                 <tr class="text-center" th:each="product: ${farm.products}">
                                     <td class="product-remove">
-                                        <a href="#">
+                                        <a th:onclick="|deleteProduct(${farm.farmId}, ${product.id})|">
                                             <span class="ion-ios-close"></span>
                                         </a>
                                     </td>
@@ -256,6 +256,7 @@
     </svg>
 </div>
 
+<script src="/js/cart.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-migrate-3.0.1.min.js"></script>
 <script src="/js/popper.min.js"></script>
@@ -285,7 +286,6 @@
         // 각 가격 요소의 data-price 속성 값을 더하기
         priceElements.forEach(function (priceElement) {
             const price = parseInt(priceElement.textContent.replace(/[^\d]/g, ''), 10);
-            console.log('price: ' + price);
             if (!isNaN(price)) {
                 totalSum += price;
             }

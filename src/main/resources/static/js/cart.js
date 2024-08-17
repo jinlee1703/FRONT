@@ -1,21 +1,3 @@
-document.getElementById("buy").addEventListener('click', function () {
-
-});
-
-
-document.getElementById("put-cart").addEventListener('click', function () {
-    const productId = this.getAttribute('data-product-id');
-    const farmId = this.getAttribute('data-farm-id');
-    const user = getCookie('id');
-    const data = getProductInfo(productId, farmId);
-    // if (user !== null) {
-    //     // post
-    //     postRequest({userId: user, productId: productId, quantity: document.getElementById("quantity").value});
-    //     return;
-    // }
-    saveProductToCookie(data);
-});
-
 function postRequest(data) {
     console.log('fetch');
     fetch('/cart', {
@@ -148,4 +130,36 @@ function getCookie(cookieName) {
         }
     }
     return null;  // 쿠키가 존재하지 않을 경우 null 반환
+}
+
+// delete product
+function deleteProduct(farmId, productId) {
+    let cartData = getCookie('cart');
+
+    // 3. 해당 farmId를 가진 항목 찾기
+    let farm = cartData.find(farmItem => farmItem.farmId == farmId);
+
+    if (farm) {
+        // 4. 해당 farmId에서 productId를 가진 항목 삭제
+        farm.products = farm.products.filter(product => product.id != productId);
+
+        // 5. 만약 해당 farmId의 모든 product가 삭제되었다면 farmId 항목도 삭제
+        if (farm.products.length === 0) {
+            cartData = cartData.filter(farmItem => farmItem.farmId != farmId);
+        }
+
+        // 6. 업데이트된 cart 데이터를 다시 JSON 문자열로 변환하여 쿠키로 저장
+        if (cartData.length > 0) {
+            setCookie("cart", cartData, 7);
+        } else {
+            // 모든 항목이 삭제된 경우 쿠키를 제거
+            document.cookie = "cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+    } else {
+        console.log("No matching farmId found: " + farm);
+    }
+
+    alert("삭제되었습니다.");
+    console.log(cartData);
+    window.location.reload();
 }
