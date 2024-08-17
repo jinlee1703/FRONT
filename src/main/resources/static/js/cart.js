@@ -8,11 +8,11 @@ document.getElementById("put-cart").addEventListener('click', function () {
     const farmId = this.getAttribute('data-farm-id');
     const user = getCookie('id');
     const data = getProductInfo(productId, farmId);
-    if (user !== null) {
-        // post
-        postRequest({userId: user, productId: productId, quantity: document.getElementById("quantity").value});
-        return;
-    }
+    // if (user !== null) {
+    //     // post
+    //     postRequest({userId: user, productId: productId, quantity: document.getElementById("quantity").value});
+    //     return;
+    // }
     saveProductToCookie(data);
 });
 

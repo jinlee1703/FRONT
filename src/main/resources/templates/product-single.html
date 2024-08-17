@@ -98,6 +98,28 @@
 
 <!--product-->
 <section class="ftco-section">
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    상품을 장바구니에 담았습니다!
+                    장바구니로 이동할까요?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">계속 쇼핑하기</button>
+                    <a href="/cart" class="btn btn-primary">장바구니로 가기</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="w-100" style="margin: 20px 0; border-bottom: 1px solid">
             <i class="fa-regular fa-heart" style="font-size: 30px;"></i>
@@ -150,7 +172,7 @@
                             <i class="fa-regular fa-heart" style="font-size: 1.2rem; margin: 0 10px;"></i>
                             찜하기
                         </button>
-                        <button id="put-cart" class="btn btn-black py-3 px-5 ml-2" style="font-size: inherit; color: #000; width: 50%; height: 100% !important;" th:data-product-id="${product.id}" th:data-farm-id="${product.farmId}">장바구니에 넣기</button>
+                        <button data-toggle="modal" data-target="#exampleModalCenter" id="put-cart" class="btn btn-black py-3 px-5 ml-2" style="font-size: inherit; color: #000; width: 50%; height: 100% !important;" th:data-product-id="${product.id}" th:data-farm-id="${product.farmId}">장바구니에 넣기</button>
                     </div>
                     <div class="w-100 mt-3">
                         <button id="buy" class="btn btn-primary py-3 px-5 w-100" style="font-size: inherit; color: #fff; background-color: #1c7430 !important; height: 100% !important;">바로 구매</button>

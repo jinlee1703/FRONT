@@ -54,7 +54,6 @@ public class ProductController {
 
         List<String> img = new ArrayList<>();
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
-        System.out.println("detial: "+productDetail.getImg().get(0).getImg());
         // sequence대로 정렬
         productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
 
