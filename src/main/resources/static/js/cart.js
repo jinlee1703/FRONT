@@ -163,3 +163,23 @@ function deleteProduct(farmId, productId) {
     console.log(cartData);
     window.location.reload();
 }
+
+// 수량 수정
+function alterProduct(farmId, productId, quantity) {
+    let cartData = getCookie('cart');
+    console.log('farmId: ' + farmId);
+    console.log('productId: ' + productId);
+    const farm = cartData.find(farmItem => farmItem.farmId == farmId);
+    if (farm) {
+        let product = farm.products.find(product => product.id == productId);
+
+        if (product) {
+            product.quantity = quantity;
+            setCookie('cart', cartData, 7);
+        } else {
+            console.error('product not found');
+        }
+    } else {
+        console.error('farm not found');
+    }
+}
