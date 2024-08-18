@@ -99,7 +99,8 @@
         <div class="row justify-content-center">
             <div class="col-xl-8 ftco-animate">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
+                    <!-- 카드 헤더의 색상을 초록색으로 변경 -->
+                    <div class="card-header bg-success text-white">
                         <h3 class="mb-0">내 정보</h3>
                     </div>
                     <div class="card-body">
@@ -154,7 +155,8 @@
                             <div class="container mt-5">
                                 <!-- address가 null이 아닌 경우 -->
                                 <div th:if="${address != null}" class="card">
-                                    <div class="card-header bg-primary text-white">
+                                    <!-- 주소 정보 카드 헤더의 색상을 초록색으로 변경 -->
+                                    <div class="card-header bg-success text-white">
                                         <h3>주소 정보</h3>
                                     </div>
                                     <div class="card-body">
@@ -180,7 +182,8 @@
                                         <div class="form-group">
                                             <input type="text" id="sample6_detailAddress" name="detail" class="form-control" placeholder="상세주소" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-block">주소 등록</button>
+                                        <!-- 제출 버튼의 색상을 초록색으로 변경 -->
+                                        <button type="submit" class="btn btn-success btn-block">주소 등록</button>
                                     </form>
                                 </div>
                             </div>
@@ -191,6 +194,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- Daum 우편번호 서비스 Script -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
