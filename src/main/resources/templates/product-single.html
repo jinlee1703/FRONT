@@ -5,6 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
     <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
@@ -175,7 +182,7 @@
                         <button data-toggle="modal" data-target="#exampleModalCenter" id="put-cart" class="btn btn-black py-3 px-5 ml-2" style="font-size: inherit; color: #000; width: 50%; height: 100% !important;" th:data-product-id="${product.id}" th:data-farm-id="${product.farmId}">장바구니에 넣기</button>
                     </div>
                     <div class="w-100 mt-3">
-                        <button id="buy" class="btn btn-primary py-3 px-5 w-100" style="font-size: inherit; color: #fff; background-color: #1c7430 !important; height: 100% !important;">바로 구매</button>
+                        <button id="buy" class="btn btn-primary py-3 px-5 w-100" style="font-size: inherit; color: #fff; background-color: #1c7430 !important; height: 100% !important;" data-toggle="modal" data-target="#buyNowModal">바로 구매</button>
                     </div>
                 </div>
             </div>
@@ -454,6 +461,76 @@
     </div>
 </footer>
 
+<!-- 배송지 입력 모달 -->
+<div class="modal fade" id="buyNowModal" tabindex="-1" role="dialog" aria-labelledby="buyNowModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="buyNowModalLabel">배송지 정보 입력</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="buyNowForm" action="/pay" method="GET">
+
+                    <input type="hidden" id="amountValue" name="amountValue">
+                    <input type="hidden" id="directPay" name="directPay" value="1">
+                    <input type="hidden" id="quantityValue" name="quantity">
+                    <input type="hidden" id="priceValue" name="price">
+                    <input type="hidden" id="productId" name="productId" th:value="${product.id}">
+
+                    <div class="form-group">
+                        <label for="buyerName">이름</label>
+                        <input type="text" class="form-control" id="buyerName" name="receiverName"
+                               th:value="${userName != null ? userName : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerPhone">전화번호</label>
+                        <input type="text" class="form-control" id="buyerPhone" name="receiverPhone"
+                               th:value="${phoneNumber != null ? phoneNumber : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerAddress">주소</label>
+                        <input type="text" class="form-control" id="buyerAddress" name="receiverAddress"
+                               th:value="${addressResponse != null and addressResponse.address != null ? addressResponse.address : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerDetailAddress">상세 주소</label>
+                        <input type="text" class="form-control" id="buyerDetailAddress" name="receiverAddressDetail"
+                               th:value="${addressResponse != null and addressResponse.detail != null ? addressResponse.detail : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerPostalCode">우편번호</label>
+                        <input type="text" class="form-control" id="buyerPostalCode" name="invoiceNumber"
+                               th:value="${addressResponse != null and addressResponse.zoneNumber != null ? addressResponse.zoneNumber : ''}" required>
+                    </div>
+
+                    <!-- 배송 방법 선택 -->
+                    <div class="form-group">
+                        <label for="deliveryMethod">배송 방법</label><br>
+                        <input type="radio" id="delivery" name="deliveryMethod" value="delivery" checked>
+                        <label for="delivery">택배로 받기</label><br>
+                        <input type="radio" id="pickup" name="deliveryMethod" value="pickup">
+                        <label for="pickup">직거래하기</label>
+                    </div>
+
+                    <!-- 직거래 날짜 선택 -->
+                    <div class="form-group" id="transactionDateField" style="display: none;">
+                        <label for="transactionDate">직거래 날짜</label>
+                        <input type="datetime-local" class="form-control" id="transactionDate" name="transactionDate" placeholder="날짜를 선택하세요">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">주문하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen">
@@ -483,6 +560,77 @@
 <script src="/js/main.js"></script>
 
 <script>
+
+
+    $(document).ready(function() {
+        // 배송 방법에 따라 직거래 날짜 선택 필드를 표시/숨기기
+        $('input[name="deliveryMethod"]').change(function() {
+            if ($('#pickup').is(':checked')) {
+                $('#transactionDateField').show();
+                $('#transactionDate').prop('required', true); // 필수로 설정
+            } else {
+                $('#transactionDateField').hide();
+                $('#transactionDate').prop('required', false); // 필수 해제
+            }
+        });
+
+        // 초기화 시, '택배로 받기' 선택에 따른 필드 숨김
+        if ($('#pickup').is(':checked')) {
+            $('#transactionDateField').show();
+        } else {
+            $('#transactionDateField').hide();
+        }
+
+        var today = new Date();
+        var offset = 9 * 60 * 60 * 1000; // UTC+9 시간 오프셋
+        var seoulTime = new Date(today.getTime() + offset);
+        seoulTime.setDate(seoulTime.getDate() + 1);
+
+        var year = seoulTime.getFullYear();
+        var month = String(seoulTime.getMonth() + 1).padStart(2, '0');
+        var day = String(seoulTime.getDate()).padStart(2, '0');
+        var hours = String(seoulTime.getHours()).padStart(2, '0');
+        var minutes = String(seoulTime.getMinutes()).padStart(2, '0');
+
+        // 'YYYY-MM-DDTHH:MM' 형식으로 변환
+        var tomorrow = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+        // transactionDate 필드의 min 속성에 값 설정
+        document.getElementById("transactionDate").setAttribute('min', tomorrow);
+
+    });
+
+
+
+
+    document.getElementById("buyNowForm").addEventListener("submit", function(event) {
+        // 수량과 가격 가져오기
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const priceText = document.getElementById('price').innerText;
+
+        // 가격에서 숫자만 추출 (예: "1,000원" -> 1000)
+        const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+
+        // amountValue 계산
+        const amountValue = quantity * price;
+
+        // Hidden input fields에 값 설정
+        document.getElementById('amountValue').value = amountValue;
+        document.getElementById('quantityValue').value = quantity;
+        document.getElementById('priceValue').value = price;
+    });
+
+
+
+    document.getElementById("buyNowForm").addEventListener("submit", function(event) {
+        // 추가적인 클라이언트 측 검증이 필요한 경우 여기에 추가
+
+        // 검증 후 서버로 폼 데이터를 전송
+        // 폼의 기본 동작에 따라 자동으로 /pay로 POST 요청이 전송됩니다.
+    });
+
+
+
     document.getElementById("put-cart").addEventListener('click', function () {
         const productId = this.getAttribute('data-product-id');
         const farmId = this.getAttribute('data-farm-id');
