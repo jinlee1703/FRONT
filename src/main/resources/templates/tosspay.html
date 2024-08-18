@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="https://static.toss.im/icons/png/4x/icon-toss-logo.png" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/toss.css" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>토스페이먼츠 샘플 프로젝트</title>
+    <title>우리음식::농가와 소비자를 잇다</title>
     <!-- 토스페이먼츠 SDK 추가 -->
     <script src="https://js.tosspayments.com/v2/standard"></script>
   </head>
@@ -27,6 +27,26 @@
 <!--            >-->
 <!--          </div>-->
 <!--        </div>-->
+
+
+
+        <div>
+          <input type="hidden" id="amount-input" name="amountValue" th:value="${amountValue}" />
+          <input type="hidden" id="invoiceNumber" name="invoiceNumber" th:value="${invoiceNumber}" />
+          <input type="hidden" id="receiverName" name="receiverName" th:value="${receiverName}" />
+          <input type="hidden" id="receiverPhone" name="receiverPhone" th:value="${receiverPhone}" />
+          <input type="hidden" id="receiverAddress" name="receiverAddress" th:value="${receiverAddress}" />
+          <input type="hidden" id="transactionDate" name="transactionDate" th:value="${transactionDate}" />
+          <input type="hidden" id="deliveryMethod" name="deliveryMethod" th:value="${deliveryMethod}" />
+          <input type="hidden" id="quantity" name="deliveryMethod" th:value="${quantity}" />
+          <input type="hidden" id="price" name="deliveryMethod" th:value="${price}" />
+          <input type="hidden" id="directPay" name="directPay" th:value="${directPay}" />
+          <input type="hidden" id="productId" name="productId" th:value="${productId}" />
+          <input type="hidden" id="receiverAddressDetail" name="receiverAddressDetail" th:value="${receiverAddressDetail}" />
+
+
+        </div>
+
         <!-- 결제하기 버튼 -->
         <div class="result wrapper">
           <button class="button" id="payment-button" style="margin-top: 30px">
@@ -39,10 +59,34 @@
 
       async function main() {
         const button = document.getElementById("payment-button");
+        const amountInput = document.getElementById("amount-input");
+        const invoiceNumber = document.getElementById("invoiceNumber");
+        const receiverName = document.getElementById("receiverName");
+        const receiverPhone = document.getElementById("receiverPhone");
+        const receiverAddress = document.getElementById("receiverAddress");
+        const receiverAddressDetail = document.getElementById("receiverAddressDetail");
+        const transactionDate = document.getElementById("transactionDate");
+        const deliveryMethod = document.getElementById("deliveryMethod");
+        const directPay = document.getElementById("directPay");
+        const price = document.getElementById("price");
+        const quantity = document.getElementById("quantity");
+        const productId = document.getElementById("productId");
+
+
+        // 콘솔 로그로 각 값 출력 (필요한 경우 삭제 가능)
+        console.log("Amount Value:", amountInput.value);
+        console.log("Invoice Number:", invoiceNumber.value);
+        console.log("Receiver Name:", receiverName.value);
+        console.log("Receiver Phone:", receiverPhone.value);
+        console.log("Receiver Address:", receiverAddress.value);
+        console.log("transactionDate:", transactionDate.value);
+        console.log("deliveryMethod:", deliveryMethod.value);
+
         // const coupon = document.getElementById("coupon-box");
+        // 사용자가 입력한 금액을 기반으로 amount 설정
         const amount = {
           currency: "KRW",
-          value: 50000, // todo 이 부분은 내가 값 합산해서 넣어줘야 함
+          value: parseInt(amountInput.value, 10), // 입력된 금액을 정수로 변환하여 설정
         };
         // ------  결제위젯 초기화 ------
         // TODO: clientKey는 개발자센터의 결제위젯 연동 키 > 클라이언트 키로 바꾸세요.
@@ -75,7 +119,7 @@
 
         // ------  이용약관 UI 렌더링 ------
         // @docs https://docs.tosspayments.com/reference/widget-sdk#renderagreement선택자-옵션
-        await widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" });
+        await widgets.renderAgreement({selector: "#agreement", variantKey: "AGREEMENT"});
 
         // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
         // @docs https://docs.tosspayments.com/sdk/v2/js#widgetssetamount
@@ -100,10 +144,26 @@
         button.addEventListener("click", async function () {
           // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
           // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
+
+
+          const successUrl = window.location.origin + "/success" +
+                  "?invoiceNumber=" + encodeURIComponent(invoiceNumber.value) +
+                  "&amountValue=" + encodeURIComponent(amountInput.value) +
+                  "&receiverName=" + encodeURIComponent(receiverName.value) +
+                  "&receiverPhone=" + encodeURIComponent(receiverPhone.value) +
+                  "&receiverAddress=" + encodeURIComponent(receiverAddress.value) +
+                  "&receiverAddressDetail=" + encodeURIComponent(receiverAddressDetail.value) +
+                  "&deliveryMethod=" + encodeURIComponent(deliveryMethod.value) +
+                  "&directPay=" + encodeURIComponent(directPay.value) +
+                  "&quantity=" + encodeURIComponent(quantity.value) +
+                  "&price=" + encodeURIComponent(price.value) +
+                  "&productId=" + encodeURIComponent(productId.value) +
+                  "&transactionDate=" + encodeURIComponent(transactionDate.value);
+
           await widgets.requestPayment({
             orderId: generateRandomString(),
             orderName: "주문",
-            successUrl: window.location.origin + "/success",
+            successUrl: successUrl,
             failUrl: window.location.origin + "/fail",
             customerEmail: "customer123@gmail.com",
             customerName: "김토스",

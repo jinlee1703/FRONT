@@ -5,6 +5,10 @@ import com.wefood.front.product.dto.ProductDetailResponse;
 import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.ProductResponse;
 import com.wefood.front.product.service.ProductService;
+import com.wefood.front.user.adaptor.UserAdaptor;
+import com.wefood.front.user.dto.response.AddressResponse;
+import com.wefood.front.user.dto.response.UserGetResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +18,12 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    private final UserAdaptor userAdaptor;
 
     @GetMapping
     public String index(Model model, @CookieValue(name = "id", required = false) String cookie) {
@@ -47,7 +50,8 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "id", required = false) String cookie) {
+    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "id", required = false) String cookie
+            , @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id) {
         if (cookie != null) {
             model.addAttribute("login", "Y");
         }
@@ -66,6 +70,14 @@ public class ProductController {
         }
         model.addAttribute("img", img);
         model.addAttribute("product", productDetail);
+
+        if (name != null) {
+            model.addAttribute("userName", name);
+            model.addAttribute("phoneNumber", phoneNumber);
+
+            AddressResponse addressResponse = userAdaptor.findAddress(id);
+            model.addAttribute("addressResponse", addressResponse);
+        }
         return "/product-single";
     }
 
