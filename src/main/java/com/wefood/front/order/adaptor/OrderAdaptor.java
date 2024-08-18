@@ -2,6 +2,7 @@ package com.wefood.front.order.adaptor;
 
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
+import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
 import com.wefood.front.order.dto.response.OrderDetailGetResponse;
 import com.wefood.front.order.dto.response.OrderGetResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
@@ -57,6 +58,11 @@ public class OrderAdaptor {
                 , id
         );
         return responseEntity.getBody().getData();
+    }
+
+    public void createOrder(DirectOrderCreateRequest orderCreateRequest, String id) {
+
+        restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/{id}", orderCreateRequest, Void.class, id);
     }
 
 }

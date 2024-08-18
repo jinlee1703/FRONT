@@ -1,11 +1,15 @@
 package com.wefood.front.payment;
 
+import com.wefood.front.order.adaptor.OrderAdaptor;
+import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,14 @@ import java.util.Base64;
 public class WidgetController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final MessageSource messageSource;
+
+    private final OrderAdaptor orderAdaptor;
+
+    WidgetController(@Qualifier("messageSource") MessageSource messageSource, OrderAdaptor orderAdaptor) {
+        this.messageSource = messageSource;
+        this.orderAdaptor = orderAdaptor;
+    }
 
     @RequestMapping(value = "/confirm")
     public ResponseEntity<JSONObject> confirmPayment(@RequestBody String jsonBody) throws Exception {
@@ -95,16 +107,44 @@ public class WidgetController {
                                  @RequestParam String receiverName,
                                  @RequestParam String receiverPhone,
                                  @RequestParam String receiverAddress,
-                                 @RequestParam String amountValue,
-                                 @RequestParam (required = false) String meetingAt,
-                                 @RequestParam (required = false)String deliveryDate) throws Exception {
+                                 @RequestParam String receiverAddressDetail,
+                                 @RequestParam Integer amountValue,
+                                 @RequestParam String deliveryMethod,
+                                 @RequestParam Integer quantity,
+                                 @RequestParam Integer price,
+                                 @RequestParam Long productId,
+                                 @RequestParam(required = false) String directPay,
+                                 @RequestParam(required = false) String transactionDate,
+                                 @CookieValue String id) throws Exception {
 
-        System.out.println("@@@");
-        System.out.println(meetingAt);
-        System.out.println(deliveryDate);
+        System.out.println("@#@#@#@#@");
+        System.out.println(invoiceNumber);
+        System.out.println(receiverAddress);
+        System.out.println(receiverName);
+        System.out.println(receiverPhone);
+        System.out.println(amountValue);
+        System.out.println(deliveryMethod);
+        System.out.println(transactionDate);
+        System.out.println(quantity);
+        System.out.println(price);
+        System.out.println(directPay);
+
+        // 값이 있으면 바로구매 한거임
+        if (directPay != null) {
+
+            // 택배
+            if (deliveryMethod.equals("delivery")) {
+                orderAdaptor.createOrder(new DirectOrderCreateRequest(amountValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, LocalDate.now().toString(), null, productId, quantity, price), id);
+            } else {
+                // 직거래
+                orderAdaptor.createOrder(new DirectOrderCreateRequest(amountValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, null, transactionDate, productId, quantity, price), id);
+            }
+        }
 
 
-        // todo 값 안넣어주면 공백이 나옴 , 이걸로 직거랜지 아닌지 구분하면 될 듯
+        // delivery면 택배
+        // pickup이면 직거래
+
         // todo 이거 가지고 order만들어
         // todo 장바구니에있는 쿠기 가지고 orderDetail만들어
         // todo 장바구니 쿠키 지워버려
@@ -118,9 +158,15 @@ public class WidgetController {
                           @RequestParam String receiverPhone,
                           @RequestParam String receiverAddress,
                           @RequestParam String amountValue,
-                          @RequestParam (required = false) String meetingAt,
-                          @RequestParam (required = false)String deliveryDate,
+                          @RequestParam String receiverAddressDetail,
+                          @RequestParam String deliveryMethod,
+                          @RequestParam String quantity,
+                          @RequestParam String price,
+                          @RequestParam Long productId,
+                          @RequestParam(required = false) String directPay,
+                          @RequestParam(required = false) String transactionDate,
                           Model model) throws Exception {
+
 
         // todo 송장번호 , 받는 사람 , 받는 주소 , 받는 전번 , 직거래 날짜
         // todo 장바구니에서 상품들 긁어와서 바로 결제 떄리기
@@ -131,8 +177,13 @@ public class WidgetController {
         model.addAttribute("receiverName", receiverName);
         model.addAttribute("receiverPhone", receiverPhone);
         model.addAttribute("receiverAddress", receiverAddress);
-        model.addAttribute("meetingAt", meetingAt);
-        model.addAttribute("deliveryDate", deliveryDate);
+        model.addAttribute("receiverAddressDetail", receiverAddressDetail);
+        model.addAttribute("directPay", directPay);
+        model.addAttribute("deliveryMethod", deliveryMethod);
+        model.addAttribute("transactionDate", transactionDate);
+        model.addAttribute("quantity", quantity);
+        model.addAttribute("price", price);
+        model.addAttribute("productId", productId);
         return "tosspay";
     }
 
@@ -157,12 +208,7 @@ public class WidgetController {
 
     @GetMapping("/payment/clear")
     public String paymentClear() {
-        return "redirect:/payform";
-    }
-
-    @GetMapping("/payform")
-    public String paymentCheck() {
-        return "about";
+        return "redirect:/order-list";
     }
 
 }
