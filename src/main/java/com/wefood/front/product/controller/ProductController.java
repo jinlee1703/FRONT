@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -52,16 +51,13 @@ public class ProductController {
             model.addAttribute("login", "Y");
         }
 
-        List<String> img = new ArrayList<>();
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
-        // sequence대로 정렬
-        productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
-
+        List<String> img = new ArrayList<>();
         for (ProductImageResponse image : productDetail.getImg()) {
             if (image.getIsThumbnail()) {
-                model.addAttribute("thumbnail", image.getImg());
+                model.addAttribute("thumbnail", image.getName());
             } else {
-                img.add(image.getImg());
+                img.add(image.getName());
             }
         }
         model.addAttribute("img", img);
@@ -80,5 +76,10 @@ public class ProductController {
         model.addAttribute("products", productsBySearch);
         model.addAttribute("page", page);
         return "/shop";
+    }
+
+    @GetMapping("/cart")
+    public String cart() {
+        return "/cart";
     }
 }

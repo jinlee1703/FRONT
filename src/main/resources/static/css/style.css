@@ -11614,7 +11614,7 @@ h1, h2, h3, h4, h5,
 
 .ftco-navbar-light .navbar-toggler {
     border: none;
-    color: rgba(255, 255, 255) !important;
+    /*color: rgba(255, 255, 255, 0.5) !important;*/
     cursor: pointer;
     padding-right: 0;
     text-transform: uppercase;
@@ -13032,7 +13032,7 @@ h1, h2, h3, h4, h5,
 }
 
 .table .thead-primary {
-    background: #1c7430;
+    background: #dbcc8f;
 }
 
 .table .thead-primary tr th {
@@ -15040,9 +15040,4 @@ a:hover {
     height: 100%;
     top: 0;
     left: 0;
-}
-
-.img-100 {
-    height: 100%;
-    width: 100%;
 }

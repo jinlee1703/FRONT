@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>우리음식 :: 농가와 소비자를 잇다</title>
+    <title>Minishop - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -71,120 +71,105 @@
     </div>
 </nav>
 <!-- END nav -->
-<section class="ftco-section ftco-cart bg-light">
+
+<section class="ftco-section ftco-cart">
     <div class="container">
-        <div th:if="${farms}" th:each="farm: ${farms}" class="mb-5 farm"
-             style="background: #fff;border-radius: 15px;padding: 10px 0;">
-            <a th:href="'/farm/'+${farm.farmId}">
-                <h3 th:text="${farm.farmName}" class="pl-2"></h3>
-            </a>
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="text-center">
+                            <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
-            <div class="row">
-                <div class="col-md-12 ftco-animate">
-                    <div class="cart-list">
-                        <table class="table">
-                            <thead class="thead-primary">
-                            <tr class="text-center">
-                                <th>&nbsp;</th>
-                                <th>&nbsp;</th>
-                                <th>상품</th>
-                                <th>가격</th>
-                                <th>수량</th>
-                                <th>합계</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="text-center" th:each="product: ${farm.products}">
-                                <td class="product-remove">
-                                    <a th:onclick="|deleteProduct(${farm.farmId}, ${product.id})|">
-                                        <span class="ion-ios-close"></span>
-                                    </a>
-                                </td>
+                            <td class="image-prod">
+                                <div class="img" style="background-image:url(/images/product-3.jpg);"></div>
+                            </td>
 
-                                <td class="image-prod">
-                                    <div class="img"
-                                         th:style="'background-image:url(' + ${product.thumbnail} + ');'"></div>
-                                </td>
+                            <td class="product-name">
+                                <h3>Nike Free RN 2019 iD</h3>
+                                <p>Far far away, behind the word mountains, far from the countries</p>
+                            </td>
 
-                                <td class="product-name">
-                                    <a th:href="'/'+${product.id}">
-                                        <h3 th:text="${product.name}"></h3>
-                                    </a>
-                                </td>
+                            <td class="price">$4.90</td>
 
-                                <td class="price"
-                                    th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}+원"></td>
+                            <td class="quantity">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="quantity" class="quantity form-control input-number"
+                                           value="1" min="1" max="100">
+                                </div>
+                            </td>
 
-                                <td class="quantity">
-                                    <div class="input-group d-flex w-100">
-                                        <input type="number" name="quantity"  th:data-product-id="${product.id}" th:data-farm-id="${farm.farmId}"
-                                               class="quantity form-control input-number" th:value="${product.quantity}"
-                                               min="1" max="100">
-                                    </div>
+                            <td class="total">$4.90</td>
+                        </tr><!-- END TR-->
 
-                                    <!--                                <div class="input-group mb-3">-->
-                                    <!--                                    <input type="text" name="quantity" class="quantity form-control input-number"-->
-                                    <!--                                           th:value="${product.quantity}" min="1" max="100">-->
-                                    <!--                                </div>-->
-                                </td>
+                        <tr class="text-center">
+                            <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
-                                <td class="total"
-                                    th:text="${#numbers.formatInteger(product.quantity*product.price, 3, 'COMMA')}+원"></td>
-                            </tr><!-- END TR-->
+                            <td class="image-prod">
+                                <div class="img" style="background-image:url(/images/product-4.jpg);"></div>
+                            </td>
 
-                            </tbody>
-                        </table>
-                    </div>
+                            <td class="product-name">
+                                <h3>Nike Free RN 2019 iD</h3>
+                                <p>Far far away, behind the word mountains, far from the countries</p>
+                            </td>
+
+                            <td class="price">$15.70</td>
+
+                            <td class="quantity">
+                                <div class="input-group mb-3">
+                                    <input type="text" name="quantity" class="quantity form-control input-number"
+                                           value="1" min="1" max="100">
+                                </div>
+                            </td>
+
+                            <td class="total">$15.70</td>
+                        </tr><!-- END TR-->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-        <div th:unless="${farms}">
-            <h2>장바구니에 담긴 상품이 없습니다.</h2>
-            <p>원하는 상품을 장바구니에 담아보세요!</p>
-            <a href="/" class="btn btn-primary" style="font-size: 1.5em">
-                쇼핑 계속하기 >
-            </a>
+        <div class="row justify-content-start">
+            <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
+                <div class="cart-total mb-3">
+                    <h3>Cart Totals</h3>
+                    <p class="d-flex">
+                        <span>Subtotal</span>
+                        <span>$20.60</span>
+                    </p>
+                    <p class="d-flex">
+                        <span>Delivery</span>
+                        <span>$0.00</span>
+                    </p>
+                    <p class="d-flex">
+                        <span>Discount</span>
+                        <span>$3.00</span>
+                    </p>
+                    <hr>
+                    <p class="d-flex total-price">
+                        <span>Total</span>
+                        <span>$17.60</span>
+                    </p>
+                </div>
+                <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a>
+                </p>
+            </div>
         </div>
-
-        <!--        <div class="row justify-content-start">-->
-        <!--            <div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">-->
-        <!--                <div class="cart-total mb-3">-->
-        <!--                    <h3>Cart Totals</h3>-->
-        <!--                    <p class="d-flex">-->
-        <!--                        <span>Subtotal</span>-->
-        <!--                        <span>$20.60</span>-->
-        <!--                    </p>-->
-        <!--                    <p class="d-flex">-->
-        <!--                        <span>Delivery</span>-->
-        <!--                        <span>$0.00</span>-->
-        <!--                    </p>-->
-        <!--                    <p class="d-flex">-->
-        <!--                        <span>Discount</span>-->
-        <!--                        <span>$3.00</span>-->
-        <!--                    </p>-->
-        <!--                    <hr>-->
-        <!--                    <p class="d-flex total-price">-->
-        <!--                        <span>Total</span>-->
-        <!--                        <span>$17.60</span>-->
-        <!--                    </p>-->
-        <!--                </div>-->
-        <!--                <p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a>-->
-        <!--                </p>-->
-        <!--            </div>-->
-        <!--        </div>-->
     </div>
 </section>
 
-<div style="position: fixed; right: 0; bottom: 0; left: 0; z-index: 3000; height: 76px; background-color: #000;">
-    <div class="container"
-         style="display: flex;justify-content: end;font-size: 1.5em;align-items: center;text-align: center;height: 100%;color: #fff;">
-        총 주문금액 &nbsp;<h2 id="total-price" style="color: #fff"></h2>원
-        <button id="order"
-                style="width: 20%;background: #1c7430;border: none;border-radius: 15px;margin: 0 1em;color: #fff">주문하기
-        </button>
-    </div>
-</div>
 
 <footer class="ftco-footer ftco-section">
     <div class="container">
@@ -273,7 +258,7 @@
     </svg>
 </div>
 
-<script src="/js/cart.js"></script>
+
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-migrate-3.0.1.min.js"></script>
 <script src="/js/popper.min.js"></script>
@@ -292,68 +277,6 @@
 <script src="/js/main.js"></script>
 
 <script>
-    // 모든 input 요소에 대해 focusout 이벤트 리스너 추가
-    document.querySelectorAll('input[name="quantity"]').forEach(function (input) {
-        input.addEventListener('change', function () {
-            const value = parseInt(this.value, 10);
-
-            // 값이 0 이하이면 경고 메시지 표시
-            if (value <= 0) {
-                alert("수량을 0보다 크게 입력하세요");
-                // focus를 다시 input으로 이동
-                this.focus();
-                return;
-            }
-            if (value > 100) {
-                alert("최대 수량은 100개입니다.");
-                this.focus();
-                return;
-            }
-
-
-            alterProduct(this.getAttribute('data-farm-id'), this.getAttribute('data-product-id'), value);
-        });
-    });
-
-    document.getElementById('order').addEventListener('click', function () {
-        let flag = true;
-        document.querySelectorAll('input[name="quantity"]').forEach(function (input) {
-            const value = parseInt(input.value, 10);
-
-            if (value <= 0) {
-                flag = false;
-                alert("수량을 0보다 크게 입력하세요");
-            }
-            if (value > 100) {
-                flag = false;
-                alert("최대 수량은 100개입니다.");
-            }
-
-        })
-        if (flag) {
-            location.href = '/order-list';
-        }
-    });
-
-    // 장바구니 total price
-    document.addEventListener("DOMContentLoaded", function () {
-
-        // 모든 가격 요소를 선택
-        const priceElements = document.querySelectorAll(".price");
-        let totalSum = 0;
-
-        // 각 가격 요소의 data-price 속성 값을 더하기
-        priceElements.forEach(function (priceElement) {
-            const price = parseInt(priceElement.textContent.replace(/[^\d]/g, ''), 10);
-            if (!isNaN(price)) {
-                totalSum += price;
-            }
-        });
-
-        // 총합을 특정 요소에 출력
-        document.getElementById("total-price").textContent = totalSum.toLocaleString();
-    });
-
     $(document).ready(function () {
 
         var quantitiy = 0;
