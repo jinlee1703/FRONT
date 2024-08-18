@@ -56,6 +56,13 @@ public class UserController {
             // 응답에 쿠키 추가
             response.addCookie(idCookie);
 
+            Cookie nameCookie = new Cookie("name", String.valueOf(loginResponse.name())); // 쿠키 이름과 값 설정
+            nameCookie.setPath("/"); // 쿠키가 적용될 경로 설정
+            nameCookie.setMaxAge(7 * 24 * 60 * 60); // 쿠키의 유효기간 설정 (7일 동안 유효)
+            nameCookie.setHttpOnly(true); // XSS 공격 방지를 위해 HttpOnly 설정
+            // 응답에 쿠키 추가
+            response.addCookie(nameCookie);
+
             Cookie isSellerCookie;
             if (loginResponse.isSeller()) {
                 isSellerCookie = new Cookie("isSeller", "true"); // 쿠키 이름과 값 설정
