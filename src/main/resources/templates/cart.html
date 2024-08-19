@@ -176,10 +176,73 @@
     </div>
 </section>
 
+<!-- 주문 확인 모달 -->
+<div class="modal fade" id="orderConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderConfirmationModalLabel">주문 확인</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="buyNowForm" action="/basket-pay" method="GET">
+
+                    <div class="form-group">
+                        <label for="buyerName">이름</label>
+                        <input type="text" class="form-control" id="buyerName" name="receiverName"
+                               th:value="${userName != null ? userName : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerPhone">전화번호</label>
+                        <input type="text" class="form-control" id="buyerPhone" name="receiverPhone"
+                               th:value="${phoneNumber != null ? phoneNumber : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerAddress">주소</label>
+                        <input type="text" class="form-control" id="buyerAddress" name="receiverAddress"
+                               th:value="${addressResponse != null and addressResponse.address != null ? addressResponse.address : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerDetailAddress">상세 주소</label>
+                        <input type="text" class="form-control" id="buyerDetailAddress" name="receiverAddressDetail"
+                               th:value="${addressResponse != null and addressResponse.detail != null ? addressResponse.detail : ''}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="buyerPostalCode">우편번호</label>
+                        <input type="text" class="form-control" id="buyerPostalCode" name="invoiceNumber"
+                               th:value="${addressResponse != null and addressResponse.zoneNumber != null ? addressResponse.zoneNumber : ''}" required>
+                    </div>
+
+                    <!-- 배송 방법 선택 -->
+                    <div class="form-group">
+                        <label for="deliveryMethod">배송 방법</label><br>
+                        <input type="radio" id="delivery" name="deliveryMethod" value="delivery" checked>
+                        <label for="delivery">택배로 받기</label><br>
+                        <input type="radio" id="pickup" name="deliveryMethod" value="pickup">
+                        <label for="pickup">직거래하기</label>
+                    </div>
+
+                    <!-- 직거래 날짜 선택 -->
+                    <div class="form-group" id="transactionDateField" style="display: none;">
+                        <label for="transactionDate">직거래 날짜</label>
+                        <input type="datetime-local" class="form-control" id="transactionDate" name="transactionDate" placeholder="날짜를 선택하세요">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">주문하기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div style="position: fixed; right: 0; bottom: 0; left: 0; z-index: 3000; height: 76px; background-color: #000;">
     <div class="container"
          style="display: flex;justify-content: end;font-size: 1.5em;align-items: center;text-align: center;height: 100%;color: #fff;">
         총 주문금액 &nbsp;<h2 id="total-price" style="color: #fff"></h2>원
+
         <button id="order"
                 style="width: 20%;background: #1c7430;border: none;border-radius: 15px;margin: 0 1em;color: #fff">주문하기
         </button>
@@ -292,6 +355,67 @@
 <script src="/js/main.js"></script>
 
 <script>
+
+
+    $(document).ready(function() {
+        // 배송 방법에 따라 직거래 날짜 선택 필드를 표시/숨기기
+        $('input[name="deliveryMethod"]').change(function() {
+            if ($('#pickup').is(':checked')) {
+                $('#transactionDateField').show();
+                $('#transactionDate').prop('required', true); // 필수로 설정
+            } else {
+                $('#transactionDateField').hide();
+                $('#transactionDate').prop('required', false); // 필수 해제
+            }
+        });
+
+        // 초기화 시, '택배로 받기' 선택에 따른 필드 숨김
+        if ($('#pickup').is(':checked')) {
+            $('#transactionDateField').show();
+        } else {
+            $('#transactionDateField').hide();
+        }
+
+        var today = new Date();
+        var offset = 9 * 60 * 60 * 1000; // UTC+9 시간 오프셋
+        var seoulTime = new Date(today.getTime() + offset);
+        seoulTime.setDate(seoulTime.getDate() + 1);
+
+        var year = seoulTime.getFullYear();
+        var month = String(seoulTime.getMonth() + 1).padStart(2, '0');
+        var day = String(seoulTime.getDate()).padStart(2, '0');
+        var hours = String(seoulTime.getHours()).padStart(2, '0');
+        var minutes = String(seoulTime.getMinutes()).padStart(2, '0');
+
+        // 'YYYY-MM-DDTHH:MM' 형식으로 변환
+        var tomorrow = year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+
+        // transactionDate 필드의 min 속성에 값 설정
+        document.getElementById("transactionDate").setAttribute('min', tomorrow);
+
+    });
+
+
+
+
+    document.getElementById("buyNowForm").addEventListener("submit", function(event) {
+        // 수량과 가격 가져오기
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const priceText = document.getElementById('price').innerText;
+
+        // 가격에서 숫자만 추출 (예: "1,000원" -> 1000)
+        const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+
+        // amountValue 계산
+        const amountValue = quantity * price;
+
+        // Hidden input fields에 값 설정
+        document.getElementById('amountValue').value = amountValue;
+        document.getElementById('quantityValue').value = quantity;
+        document.getElementById('priceValue').value = price;
+    });
+
+
     // 모든 input 요소에 대해 focusout 이벤트 리스너 추가
     document.querySelectorAll('input[name="quantity"]').forEach(function (input) {
         input.addEventListener('change', function () {
@@ -331,7 +455,8 @@
 
         })
         if (flag) {
-            location.href = '/order-list';
+            // 모달을 띄움
+            $('#orderConfirmationModal').modal('show');
         }
     });
 
@@ -340,13 +465,15 @@
 
         // 모든 가격 요소를 선택
         const priceElements = document.querySelectorAll(".price");
+        const quantityElements = document.querySelectorAll('input[name="quantity"]');
         let totalSum = 0;
 
         // 각 가격 요소의 data-price 속성 값을 더하기
-        priceElements.forEach(function (priceElement) {
+        priceElements.forEach(function (priceElement, index) {
             const price = parseInt(priceElement.textContent.replace(/[^\d]/g, ''), 10);
-            if (!isNaN(price)) {
-                totalSum += price;
+            const quantity = parseInt(quantityElements[index].value, 10);
+            if (!isNaN(price) && !isNaN(quantity)) {
+                totalSum += price*quantity;
             }
         });
 

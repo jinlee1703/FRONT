@@ -7,26 +7,27 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
 
-    <link rel="stylesheet" href="/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
 
-    <link rel="stylesheet" href="/css/aos.css">
+    <link rel="stylesheet" href="css/aos.css">
 
-    <link rel="stylesheet" href="/css/ionicons.min.css">
+    <link rel="stylesheet" href="css/ionicons.min.css">
 
-    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="css/jquery.timepicker.css">
 
 
-    <link rel="stylesheet" href="/css/flaticon.css">
-    <link rel="stylesheet" href="/css/icomoon.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="css/flaticon.css">
+    <link rel="stylesheet" href="css/icomoon.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="goto-here">
+
 <!--회원가입, 로그인, 로그아웃, 마이페이지-->
 <div class="container user-head" th:if="${login}">
     <a href="/wish-list">좋아요</a>
@@ -41,7 +42,7 @@
 <!--검색창-->
 <div class="container" style="display: flex; justify-content: space-between; align-items: center">
     <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" class="logo-img"></a>
-    <form action="/search" class="search-container" style="height: 100%">
+    <form action="/search" method="get" class="search-container" style="height: 100%">
         <input class="search-input" name="search_word" type="text" placeholder="">
         <button class="search-button" type="submit">검색</button>
     </form>
@@ -55,16 +56,6 @@
 
         <div class="collapse navbar-collapse" id="ftco-nav" style="justify-content: center">
             <ul class="navbar-nav">
-<!--                <li class="nav-item dropdown active">-->
-<!--                    <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown"-->
-<!--                       aria-haspopup="true" aria-expanded="false">Catalog</a>-->
-<!--                    <div class="dropdown-menu" aria-labelledby="dropdown04">-->
-<!--                        <a class="dropdown-item" href="shop.html">Shop</a>-->
-<!--                        <a class="dropdown-item" href="product-single.html">Single Product</a>-->
-<!--                        <a class="dropdown-item" href="cart.html">Cart</a>-->
-<!--                        <a class="dropdown-item" href="checkout.html">Checkout</a>-->
-<!--                    </div>-->
-<!--                </li>-->
                 <li class="nav-item"><a href="/" class="nav-link">홈</a></li>
                 <li class="nav-item"><a href="/market-price" class="nav-link">시세 조회</a></li>
                 <li class="nav-item"><a href="/search/category/1" class="nav-link">신선 채소</a></li>
@@ -79,99 +70,37 @@
             </ul>
         </div>
     </div>
-</nav>
-<!-- END nav -->
 
-<section class="ftco-section bg-light">
+</nav><!-- END nav -->
+
+
+<section class="ftco-section ftco-degree-bg">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-lg-10 order-md-last">
-                <div th:if="${search}">
-                    <h2 th:text="'\''+${search}+'\' 검색 결과'"></h2>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex" th:each="product: ${products.content}">
-                        <div class="product d-flex flex-column">
-                            <a th:href="${'/'+product.id}" class="img-prod">
-                                <img class="img-thumbnail" th:src="${product.img}" alt="product image">
-                                <div class="overlay"></div>
-                            </a>
-                            <div class="text py-3 pb-4 px-3">
-                                <h3><a th:href="${'/'+product.id}" th:text="${product.name}"></a></h3>
-                                <div class="pricing">
-                                    <p class="price"><span th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}+'원'"></span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-5">
-                    <div class="col text-center">
-                        <div class="block-27">
-                            <ul>
-                                <li><a href="#">&lt;</a></li>
-                                <li th:classappend="${page eq 0}?'active':''"><a th:href="'/search/category/' + ${categoryId}+'?page=0'">1</a></li>
-                                <li th:classappend="${page eq 1}?'active':''"><a th:href="'/search/category/' + ${categoryId}+'?page=1'">2</a></li>
-                                <li th:classappend="${page eq 2}?'active':''"><a th:href="'/search/category/' + ${categoryId}+'?page=2'">3</a></li>
-                                <li th:classappend="${page eq 3}?'active':''"><a th:href="'/search/category/' + ${categoryId}+'?page=3'">4</a></li>
-                                <li th:classappend="${page eq 4}?'active':''"><a th:href="'/search/category/' + ${categoryId}+'?page=4'">5</a></li>
-                                <li><a href="#">&gt;</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-lg-2">
-                <div class="sidebar">
-                    <div class="sidebar-box-2">
-                        <h2 class="heading">전체 카테고리</h2>
-                        <div class="fancy-collapse-panel">
-                            <div class="panel-group">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/1" th:classappend="${categoryId eq 1}?'category-active':'category-inactive'">
-                                                신선 채소
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/2" th:classappend="${categoryId eq 2}?'category-active':'category-inactive'">
-                                                신선 과일
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/3" th:classappend="${categoryId eq 3}?'category-active':'category-inactive'">
-                                                축산물
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/4" th:classappend="${categoryId eq 4}?'category-active':'category-inactive'">
-                                                가공식품
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                        <thead class="thead-dark">
+                        <tr class="text-center">
+                            <th>제목</th>
+                            <th>본문</th>
+                            <th>점수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="review : ${reviewList}">
+                            <td th:text="${review.title}"></td>
+                            <td th:text="${review.content()}"></td>
+                            <td th:text="${review.score}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</section> <!-- .section -->
+
 
 <footer class="ftco-footer ftco-section">
     <div class="container">
@@ -250,7 +179,6 @@
     </div>
 </footer>
 
-
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen">
     <svg class="circular" width="48px" height="48px">
@@ -261,22 +189,59 @@
 </div>
 
 
-<script src="/js/jquery.min.js"></script>
-<script src="/js/jquery-migrate-3.0.1.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery.easing.1.3.js"></script>
-<script src="/js/jquery.waypoints.min.js"></script>
-<script src="/js/jquery.stellar.min.js"></script>
-<script src="/js/owl.carousel.min.js"></script>
-<script src="/js/jquery.magnific-popup.min.js"></script>
-<script src="/js/aos.js"></script>
-<script src="/js/jquery.animateNumber.min.js"></script>
-<script src="/js/bootstrap-datepicker.js"></script>
-<script src="/js/scrollax.min.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-migrate-3.0.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.easing.1.3.js"></script>
+<script src="js/jquery.waypoints.min.js"></script>
+<script src="js/jquery.stellar.min.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/aos.js"></script>
+<script src="js/jquery.animateNumber.min.js"></script>
+<script src="js/bootstrap-datepicker.js"></script>
+<script src="js/scrollax.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="/js/google-map.js"></script>
-<script src="/js/main.js"></script>
+<script src="js/google-map.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        var quantitiy = 0;
+        $('.quantity-right-plus').click(function (e) {
+
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+
+            // If is not undefined
+
+            $('#quantity').val(quantity + 1);
+
+
+            // Increment
+
+        });
+
+        $('.quantity-left-minus').click(function (e) {
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+
+            // If is not undefined
+
+            // Increment
+            if (quantity > 0) {
+                $('#quantity').val(quantity - 1);
+            }
+        });
+
+    });
+</script>
 
 </body>
 </html>
