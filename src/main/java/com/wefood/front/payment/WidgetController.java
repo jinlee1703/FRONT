@@ -1,7 +1,12 @@
 package com.wefood.front.payment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wefood.front.order.adaptor.OrderAdaptor;
+import com.wefood.front.order.dto.CartResponse;
 import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
+import com.wefood.front.order.dto.request.OrderCreateRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,6 +26,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 public class WidgetController {
@@ -108,29 +114,18 @@ public class WidgetController {
                                  @RequestParam String receiverPhone,
                                  @RequestParam String receiverAddress,
                                  @RequestParam String receiverAddressDetail,
-                                 @RequestParam Integer amountValue,
+                                 @RequestParam(required = false) Integer amountValue,
                                  @RequestParam String deliveryMethod,
-                                 @RequestParam Integer quantity,
-                                 @RequestParam Integer price,
-                                 @RequestParam Long productId,
+                                 @RequestParam(required = false) Integer quantity,
+                                 @RequestParam(required = false) Integer price,
+                                 @RequestParam(required = false) Long productId,
                                  @RequestParam(required = false) String directPay,
                                  @RequestParam(required = false) String transactionDate,
+                                 @CookieValue(name = "cart", required = false) String cart,
                                  @CookieValue String id) throws Exception {
 
-        System.out.println("@#@#@#@#@");
-        System.out.println(invoiceNumber);
-        System.out.println(receiverAddress);
-        System.out.println(receiverName);
-        System.out.println(receiverPhone);
-        System.out.println(amountValue);
-        System.out.println(deliveryMethod);
-        System.out.println(transactionDate);
-        System.out.println(quantity);
-        System.out.println(price);
-        System.out.println(directPay);
-
         // 값이 있으면 바로구매 한거임
-        if (directPay != null) {
+        if (directPay.equals("1")) {
 
             // 택배
             if (deliveryMethod.equals("delivery")) {
@@ -139,6 +134,35 @@ public class WidgetController {
                 // 직거래
                 orderAdaptor.createOrder(new DirectOrderCreateRequest(amountValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, null, transactionDate, productId, quantity, price), id);
             }
+        } else { // 장바구니에서 구매한 거임
+
+            List<CartResponse> farms;
+
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                farms = objectMapper.readValue(cart, new TypeReference<>() {
+                });
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+            Integer totalValue = 0;
+
+            for (int i = 0; i < farms.size(); i++) {
+                for (int j = 0; j < farms.get(i).getProducts().size(); j++) {
+                    totalValue += farms.get(i).getProducts().get(j).getPrice() * farms.get(i).getProducts().get(j).getQuantity();
+                }
+            }
+
+
+            // 택배
+            if (deliveryMethod.equals("delivery")) {
+                orderAdaptor.createBasketOrder(new OrderCreateRequest(totalValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, LocalDate.now().toString(), null), farms, id);
+            } else {
+                // 직거래
+                orderAdaptor.createBasketOrder(new OrderCreateRequest(totalValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, null, transactionDate), farms, id);
+            }
+
         }
 
 
@@ -157,20 +181,16 @@ public class WidgetController {
                           @RequestParam String receiverName,
                           @RequestParam String receiverPhone,
                           @RequestParam String receiverAddress,
-                          @RequestParam String amountValue,
+                          @RequestParam(required = false) String amountValue,
                           @RequestParam String receiverAddressDetail,
                           @RequestParam String deliveryMethod,
-                          @RequestParam String quantity,
-                          @RequestParam String price,
-                          @RequestParam Long productId,
+                          @RequestParam(required = false) String quantity,
+                          @RequestParam(required = false) String price,
+                          @RequestParam(required = false) Long productId,
                           @RequestParam(required = false) String directPay,
                           @RequestParam(required = false) String transactionDate,
                           Model model) throws Exception {
 
-
-        // todo 송장번호 , 받는 사람 , 받는 주소 , 받는 전번 , 직거래 날짜
-        // todo 장바구니에서 상품들 긁어와서 바로 결제 떄리기
-        // todo 해당하는 가격들 합산해서 amountValue에 넣어주기
 
         model.addAttribute("amountValue", amountValue);
         model.addAttribute("invoiceNumber", invoiceNumber);
@@ -185,6 +205,49 @@ public class WidgetController {
         model.addAttribute("price", price);
         model.addAttribute("productId", productId);
         return "tosspay";
+    }
+
+
+    @RequestMapping(value = "/basket-pay", method = RequestMethod.GET)
+    public String basketTosspay(@RequestParam String invoiceNumber,
+                                @RequestParam String receiverName,
+                                @RequestParam String receiverPhone,
+                                @RequestParam String receiverAddress,
+                                @RequestParam String receiverAddressDetail,
+                                @RequestParam String deliveryMethod,
+                                @RequestParam(required = false) String directPay,
+                                @RequestParam(required = false) String transactionDate,
+                                @CookieValue(name = "cart", required = false) String cart,
+                                Model model) throws Exception {
+
+
+        List<CartResponse> farms;
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            farms = objectMapper.readValue(cart, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        Integer totalValue = 0;
+
+        for (int i = 0; i < farms.size(); i++) {
+            for (int j = 0; j < farms.get(i).getProducts().size(); j++) {
+                totalValue += farms.get(i).getProducts().get(j).getPrice() * farms.get(i).getProducts().get(j).getQuantity();
+            }
+        }
+        model.addAttribute("amountValue", totalValue);
+        model.addAttribute("invoiceNumber", invoiceNumber);
+        model.addAttribute("receiverName", receiverName);
+        model.addAttribute("receiverPhone", receiverPhone);
+        model.addAttribute("receiverAddress", receiverAddress);
+        model.addAttribute("receiverAddressDetail", receiverAddressDetail);
+        model.addAttribute("directPay", directPay);
+        model.addAttribute("deliveryMethod", deliveryMethod);
+        model.addAttribute("transactionDate", transactionDate);
+        return "basket-tosspay";
     }
 
     /**

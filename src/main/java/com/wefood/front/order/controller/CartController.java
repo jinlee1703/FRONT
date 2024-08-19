@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wefood.front.order.dto.CartProductRequest;
 import com.wefood.front.order.dto.CartResponse;
 import com.wefood.front.order.service.CartService;
+import com.wefood.front.user.adaptor.UserAdaptor;
+import com.wefood.front.user.dto.response.AddressResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +21,16 @@ public class CartController {
 
     private final CartService cartService;
 
-    public CartController(CartService cartService) {
+    private final UserAdaptor userAdaptor;
+
+    public CartController(CartService cartService, UserAdaptor userAdaptor) {
         this.cartService = cartService;
+        this.userAdaptor = userAdaptor;
     }
 
     @GetMapping
-    public String getCart(Model model, @CookieValue(name = "id", required = false) Long userId, @CookieValue(name = "cart", required = false) String cart) {
+    public String getCart(Model model, @CookieValue(name = "id", required = false) Long id, @CookieValue(name = "cart", required = false) String cart, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber
+    ) {
         if (cart != null) {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -34,6 +40,14 @@ public class CartController {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        if (name != null) {
+            model.addAttribute("userName", name);
+            model.addAttribute("phoneNumber", phoneNumber);
+
+            AddressResponse addressResponse = userAdaptor.findAddress(id);
+            model.addAttribute("addressResponse", addressResponse);
         }
 
         return "/cart";

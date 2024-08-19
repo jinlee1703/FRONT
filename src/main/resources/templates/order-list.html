@@ -87,6 +87,7 @@
                             <th>송장번호</th>
                             <th>수신인</th>
                             <th>수신 번호</th>
+                            <th>배송 주소</th>
                             <th>배송일</th>
                             <th>직거래일</th>
                             <th>상세보기</th>
@@ -99,6 +100,7 @@
                             <td th:text="${order.invoiceNumber}"></td>
                             <td th:text="${order.receiverName}"></td>
                             <td th:text="${order.receiverPhoneNumber}"></td>
+                            <td th:text="${order.receiverAddress()+' '+order.receiverAddressDetail()}"></td>
                             <td th:text="${order.deliveryDate != null ? order.deliveryDate : '-'}"></td>
                             <td th:text="${order.meetingAt != null ? #temporals.format(order.meetingAt, 'yyyy-MM-dd HH:mm') : '-'}"></td>
                             <td>
@@ -112,7 +114,6 @@
         </div>
     </div>
 </section> <!-- .section -->
-
 
 
 <footer class="ftco-footer ftco-section">

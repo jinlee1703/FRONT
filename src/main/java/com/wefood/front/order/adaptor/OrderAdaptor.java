@@ -2,7 +2,10 @@ package com.wefood.front.order.adaptor;
 
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
+import com.wefood.front.order.dto.CartResponse;
+import com.wefood.front.order.dto.request.BasketOrderRequest;
 import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
+import com.wefood.front.order.dto.request.OrderCreateRequest;
 import com.wefood.front.order.dto.response.OrderDetailGetResponse;
 import com.wefood.front.order.dto.response.OrderGetResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
@@ -61,8 +64,11 @@ public class OrderAdaptor {
     }
 
     public void createOrder(DirectOrderCreateRequest orderCreateRequest, String id) {
-
         restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/{id}", orderCreateRequest, Void.class, id);
+    }
+
+    public void createBasketOrder(OrderCreateRequest orderCreateRequest, List<CartResponse> farms, String id) {
+        restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/{id}/basket", new BasketOrderRequest(orderCreateRequest, farms), Void.class, id);
     }
 
 }
