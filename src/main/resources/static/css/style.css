@@ -15020,6 +15020,8 @@ a:hover {
 
 .category-active {
     color: #1c7430;
+    border: 1px solid;
+    border-radius: 10px;
 }
 
 .category-inactive {
