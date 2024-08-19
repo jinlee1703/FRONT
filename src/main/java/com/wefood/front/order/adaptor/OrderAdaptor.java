@@ -3,9 +3,11 @@ package com.wefood.front.order.adaptor;
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
 import com.wefood.front.order.dto.CartResponse;
+import com.wefood.front.order.dto.ReviewGetResponse;
 import com.wefood.front.order.dto.request.BasketOrderRequest;
 import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
 import com.wefood.front.order.dto.request.OrderCreateRequest;
+import com.wefood.front.order.dto.request.ReviewCreateRequest;
 import com.wefood.front.order.dto.response.OrderDetailGetResponse;
 import com.wefood.front.order.dto.response.OrderGetResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpMethod.GET;
@@ -32,6 +35,37 @@ public class OrderAdaptor {
 
     private static final String URL = "/api/orders";
 
+    public List<ReviewGetResponse> findOrderReviewList(Long id) {
+
+        String url = UriComponentsBuilder.fromHttpUrl(backAdaptorProperties.getAddress() + URL + "/review")
+                .queryParam("userId", id)
+                .toUriString();
+
+        ResponseEntity<Message<List<ReviewGetResponse>>> responseEntity = restTemplate.exchange(
+                url,
+                GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return responseEntity.getBody().getData();
+    }
+
+    public ReviewGetResponse findOrderReview(Long id) {
+
+        String url = UriComponentsBuilder.fromHttpUrl(backAdaptorProperties.getAddress() + URL + "/review-spec")
+                .queryParam("id", id)
+                .toUriString();
+
+        ResponseEntity<Message<ReviewGetResponse>> responseEntity = restTemplate.exchange(
+                url,
+                GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return responseEntity.getBody().getData();
+    }
 
     public List<OrderGetResponse> findOrderList(Long id) {
 
@@ -65,6 +99,17 @@ public class OrderAdaptor {
 
     public void createOrder(DirectOrderCreateRequest orderCreateRequest, String id) {
         restTemplate.postForEntity(backAdaptorProperties.getAddress() + URL + "/{id}", orderCreateRequest, Void.class, id);
+    }
+
+    public void createReview(ReviewCreateRequest reviewCreateRequest, Long orderDetailId) {
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(backAdaptorProperties.getAddress() + URL + "/review")
+                .queryParam("orderDetailId", orderDetailId)
+                .build()
+                .toUri();
+
+        // URI와 함께 POST 요청 전송
+        restTemplate.postForEntity(uri, reviewCreateRequest, Void.class);
     }
 
     public void createBasketOrder(OrderCreateRequest orderCreateRequest, List<CartResponse> farms, String id) {

@@ -53,7 +53,6 @@ public class UserAdaptor {
 
     public UserGetResponse findUser(UserGetRequest userGetRequest) {
 
-
         ResponseEntity<Message<UserGetResponse>> responseEntity = restTemplate.exchange(
                 backAdaptorProperties.getAddress() + URL + "/mypage",
                 POST,
