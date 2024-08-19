@@ -465,13 +465,15 @@
 
         // 모든 가격 요소를 선택
         const priceElements = document.querySelectorAll(".price");
+        const quantityElements = document.querySelectorAll('input[name="quantity"]');
         let totalSum = 0;
 
         // 각 가격 요소의 data-price 속성 값을 더하기
-        priceElements.forEach(function (priceElement) {
+        priceElements.forEach(function (priceElement, index) {
             const price = parseInt(priceElement.textContent.replace(/[^\d]/g, ''), 10);
-            if (!isNaN(price)) {
-                totalSum += price;
+            const quantity = parseInt(quantityElements[index].value, 10);
+            if (!isNaN(price) && !isNaN(quantity)) {
+                totalSum += price*quantity;
             }
         });
 

@@ -7,7 +7,6 @@ import com.wefood.front.product.dto.ProductResponse;
 import com.wefood.front.product.service.ProductService;
 import com.wefood.front.user.adaptor.UserAdaptor;
 import com.wefood.front.user.dto.response.AddressResponse;
-import com.wefood.front.user.dto.response.UserGetResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,21 +25,14 @@ public class ProductController {
     private final UserAdaptor userAdaptor;
 
     @GetMapping
-    public String index(Model model, @CookieValue(name = "id", required = false) String cookie) {
-        if (cookie != null) {
-            model.addAttribute("login", "Y");
-        }
+    public String index(Model model) {
         List<ProductResponse> products = productService.getProducts();
         model.addAttribute("products", products);
         return "/index";
     }
 
     @GetMapping("/search/category/{categoryId}")
-    public String searchCategory(@PathVariable(name = "categoryId") Long categoryId, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, Model model, @CookieValue(name = "id", required = false) String cookie) {
-        if (cookie != null) {
-            model.addAttribute("login", "Y");
-        }
-
+    public String searchCategory(@PathVariable(name = "categoryId") Long categoryId, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, Model model) {
         PageRequest<ProductResponse> productsByCategory = productService.getProductsByCategory(categoryId, page, size);
         model.addAttribute("products", productsByCategory);
         model.addAttribute("categoryId", categoryId);
@@ -50,12 +42,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "id", required = false) String cookie
-            , @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id) {
-        if (cookie != null) {
-            model.addAttribute("login", "Y");
-        }
-
+    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id) {
         List<String> img = new ArrayList<>();
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
         // sequence대로 정렬
@@ -82,10 +69,7 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public String search(@ModelAttribute(name = "search_word") String searchWord, Model model, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size, @CookieValue(name = "id", required = false) String cookie) {
-        if (cookie != null) {
-            model.addAttribute("login", "Y");
-        }
+    public String search(@ModelAttribute(name = "search_word") String searchWord, Model model, @RequestParam(defaultValue = "0") Long page, @RequestParam(defaultValue = "10") Long size) {
         PageRequest<ProductResponse> productsBySearch = productService.getProductsBySearch(searchWord, page, size);
 
         model.addAttribute("search", searchWord);

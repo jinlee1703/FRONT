@@ -93,7 +93,7 @@
                     <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex" th:each="product: ${products.content}">
                         <div class="product d-flex flex-column">
                             <a th:href="${'/'+product.id}" class="img-prod">
-                                <img class="img-fluid" th:src="${product.img}" alt="product image">
+                                <img class="img-thumbnail" th:src="${product.img}" alt="product image">
                                 <div class="overlay"></div>
                             </a>
                             <div class="text py-3 pb-4 px-3">
