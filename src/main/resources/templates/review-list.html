@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .star {
-            font-size: 2em;
-            color: #ccc;
-            cursor: pointer;
-        }
-
-        .star.selected {
-            color: #ffcc00;
-        }
-
-        .star:hover,
-        .star:hover ~ .star {
-            color: #ffcc00;
-        }
-    </style>
-
     <title>우리음식 :: 농가와 소비자를 잇다</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -90,54 +73,25 @@
 
 </nav><!-- END nav -->
 
+
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered">
-                        <thead>
+                        <thead class="thead-dark">
                         <tr class="text-center">
-                            <th>상품</th>
-                            <th>농가</th>
-                            <th>수량</th>
-                            <th>가격</th>
-                            <th>리뷰</th>
+                            <th>제목</th>
+                            <th>본문</th>
+                            <th>점수</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="product, productStat : ${productDetailList}" class="text-center">
-                            <td>
-                                <a th:href="@{'/' + ${product.id}}">
-                                    <span th:text="${product.name}"></span>
-                                </a>
-                                <img
-                                        th:src="@{${productImageResponseList[productStat.index].img}}"
-                                        alt="Thumbnail Image"
-                                        style="width: 50px; height: 50px; margin-left: 10px;">
-                            </td>
-                            <td th:text="${product.farmName}"></td>
-                            <td th:text="${orderDetailList[productStat.index].quantity}">Order Quantity</td>
-                            <td th:text="${orderDetailList[productStat.index].price}">Order Price</td>
-
-                            <td th:if="${orderDetailList[productStat.index].reviewId() != null}">
-                                <a th:href="@{/review(reviewId=${orderDetailList[productStat.index].reviewId()})}">리뷰 보기</a>
-                            </td>
-
-
-
-                            <!-- reviewId가 null인 경우: 리뷰 작성하기 링크를 표시 -->
-                            <td>
-                                <a th:if="${orderDetailList[productStat.index].reviewId() == null}"
-                                   href="#"
-                                   data-toggle="modal"
-                                   data-target="#reviewModal"
-                                   th:data-order-detail-id="${orderDetailList[productStat.index].id()}">
-                                    리뷰 작성하기
-                                </a>
-                            </td>
-
-
+                        <tr th:each="review : ${reviewList}">
+                            <td th:text="${review.title}"></td>
+                            <td th:text="${review.content()}"></td>
+                            <td th:text="${review.score}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -145,51 +99,7 @@
             </div>
         </div>
     </div>
-</section>
-
-<!-- 리뷰 작성 모달 -->
-<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="reviewModalLabel">리뷰 작성하기</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="reviewForm" method="post">
-                    <!-- Hidden field to hold orderDetailId -->
-                    <input type="hidden" id="orderDetailId" name="orderDetailId" required>
-
-                    <div class="form-group">
-                        <label for="title">제목</label>
-                        <input type="text" class="form-control" id="title" name="title" placeholder="리뷰 제목을 입력하세요"
-                               required>
-                    </div>
-                    <div class="form-group">
-                        <label for="content">본문</label>
-                        <textarea class="form-control" id="content" name="content" rows="3" placeholder="리뷰 내용을 입력하세요"
-                                  required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="score">점수</label>
-                        <div>
-                            <label><input type="radio" name="score" value="1" required> 1점</label>
-                            <label><input type="radio" name="score" value="2" required> 2점</label>
-                            <label><input type="radio" name="score" value="3" required> 3점</label>
-                            <label><input type="radio" name="score" value="4" required> 4점</label>
-                            <label><input type="radio" name="score" value="5" required> 5점</label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">리뷰 제출</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+</section> <!-- .section -->
 
 
 <footer class="ftco-footer ftco-section">
@@ -297,44 +207,6 @@
 <script src="js/main.js"></script>
 
 <script>
-
-    $(document).ready(function () {
-
-        // 리뷰 작성하기 링크 클릭 시, 해당 상품의 orderDetailId를 설정
-        $('a[data-target="#reviewModal"]').on('click', function () {
-            var orderDetailId = $(this).data('order-detail-id');
-
-            // hidden 필드에 값을 설정
-            $('#orderDetailId').val(orderDetailId);
-
-            // form의 action을 동적으로 설정
-            $('#reviewForm').attr('action', '/review-create?orderDetailId=' + orderDetailId);
-        });
-
-        // 리뷰 작성하기 링크 클릭 시, 해당 상품의 orderDetailId를 설정
-        $('a[data-target="#reviewModal"]').on('click', function () {
-            var orderDetailId = $(this).data('order-detail-id');
-
-            // hidden 필드에 값을 설정
-            $('#orderDetailId').val(orderDetailId);
-        });
-
-        // 별점 클릭 이벤트 처리
-        $('.star').on('click', function () {
-            var rating = $(this).data('value');
-            $('#score').val(rating); // 숨겨진 input에 값을 설정
-
-            // 모든 별의 선택 상태 초기화
-            $('.star').removeClass('selected');
-
-            // 선택된 별과 그 이전의 모든 별에 'selected' 클래스 추가
-            $(this).addClass('selected');
-            $(this).prevAll('.star').addClass('selected');
-        });
-
-
-    });
-
     $(document).ready(function () {
 
         var quantitiy = 0;
