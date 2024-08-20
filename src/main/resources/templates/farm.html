@@ -78,46 +78,53 @@
 </nav><!-- END nav -->
 
 
-<section class="ftco-section ftco-degree-bg">
+<section class="ftco-section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                        <thead class="thead-dark">
-                        <tr class="text-center">
-                            <th>상태</th>
-                            <th>총 금액</th>
-                            <th>송장번호</th>
-                            <th>수신인</th>
-                            <th>수신 번호</th>
-                            <th>배송 주소</th>
-                            <th>배송일</th>
-                            <th>직거래일</th>
-                            <th>상세보기</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="order : ${orderList}" class="text-center">
-                            <td th:text="${order.orderStatusId}"></td>
-                            <td th:text="${order.totalCost}"></td>
-                            <td th:text="${order.invoiceNumber}"></td>
-                            <td th:text="${order.receiverName}"></td>
-                            <td th:text="${order.receiverPhoneNumber}"></td>
-                            <td th:text="${order.receiverAddress()+' '+order.receiverAddressDetail()}"></td>
-                            <td th:text="${order.deliveryDate != null ? order.deliveryDate : '-'}"></td>
-                            <td th:text="${order.meetingAt != null ? #temporals.format(order.meetingAt, 'yyyy-MM-dd HH:mm') : '-'}"></td>
-                            <td>
-                                <a th:href="@{/order(id=${order.id})}" class="btn btn-primary btn-sm">상세보기</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+        <div class="row justify-content-center">
+            <div class="col-xl-8 ftco-animate">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">회원가입</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="/sign" method="POST" class="billing-form">
+                            <div class="form-group">
+                                <label for="name">이름</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phoneNumber">전화번호</label>
+                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="01012345678 형식으로 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">비밀번호</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="isSeller">판매자 여부</label>
+                                <select id="isSeller" name="isSeller" class="form-control">
+                                    <option value="yes">예</option>
+                                    <option value="no">아니요</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="accountNumber">계좌번호</label>
+                                <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력하세요" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block">제출</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section> <!-- .section -->
+
+
+<h1>5000+++</h1>
+
 
 
 <footer class="ftco-footer ftco-section">
@@ -196,6 +203,7 @@
         </div>
     </div>
 </footer>
+
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen">
