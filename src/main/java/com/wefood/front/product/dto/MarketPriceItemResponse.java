@@ -13,6 +13,8 @@ public class MarketPriceItemResponse {
 
     // 품목명
     private String item_name;
+    // 품목 코드
+    private String item_code;
     // 품종명
     private String kind_name;
     // 상품 등급

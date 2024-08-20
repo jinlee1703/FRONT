@@ -33,36 +33,46 @@
             border-spacing: 0;
             width: 100%;
         }
+
         th, td {
             padding: 6px 15px;
         }
+
         th {
             background: #42444e;
             color: #fff;
             text-align: left;
         }
+
         tr:first-child th:first-child {
             border-top-left-radius: 6px;
         }
+
         tr:first-child th:last-child {
             border-top-right-radius: 6px;
         }
+
         td {
             border-right: 1px solid #c6c9cc;
             border-bottom: 1px solid #c6c9cc;
         }
+
         td:first-child {
             border-left: 1px solid #c6c9cc;
         }
+
         tr:nth-child(even) td {
             background: #eaeaed;
         }
+
         tr:last-child td:first-child {
             border-bottom-left-radius: 6px;
         }
+
         tr:last-child td:last-child {
             border-bottom-right-radius: 6px;
         }
+
         .nav-area {
             width: 24.5% !important;
         }
@@ -127,13 +137,16 @@
                     <a class="nav-link ftco-animate active mr-lg-1 nav-area" id="v-pills-1-tab" data-toggle="pill"
                        href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">채소류</a>
 
-                    <a class="nav-link ftco-animate mr-lg-1 nav-area" id="v-pills-2-tab" data-toggle="pill" href="#v-pills-2"
+                    <a class="nav-link ftco-animate mr-lg-1 nav-area" id="v-pills-2-tab" data-toggle="pill"
+                       href="#v-pills-2"
                        role="tab" aria-controls="v-pills-2" aria-selected="false">과일류</a>
 
-                    <a class="nav-link ftco-animate nav-area mr-lg-1" id="v-pills-3-tab" data-toggle="pill" href="#v-pills-3" role="tab"
+                    <a class="nav-link ftco-animate nav-area mr-lg-1" id="v-pills-3-tab" data-toggle="pill"
+                       href="#v-pills-3" role="tab"
                        aria-controls="v-pills-3" aria-selected="false">축산물</a>
 
-                    <a class="nav-link ftco-animate nav-area" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4" role="tab"
+                    <a class="nav-link ftco-animate nav-area" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4"
+                       role="tab"
                        aria-controls="v-pills-4" aria-selected="false">먹거리 작물(곡류·감자류)</a>
 
                 </div>
@@ -155,7 +168,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${items1}" th:each="item: ${items1.data.item}">
+                                    <tr th:if="${items0}" th:each="item: ${items0.data.item}">
                                         <td th:text="${item.item_name}"></td>
                                         <td th:text="${item.kind_name}"></td>
                                         <td th:text="${item.rank}"></td>
@@ -180,7 +193,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${items2}" th:each="item: ${items2.data.item}">
+                                    <tr th:if="${items1}" th:each="item: ${items1.data.item}">
                                         <td th:text="${item.item_name}"></td>
                                         <td th:text="${item.kind_name}"></td>
                                         <td th:text="${item.rank}"></td>
@@ -205,7 +218,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${items3}" th:each="item: ${items3.data.item}">
+                                    <tr th:if="${items2}" th:each="item: ${items2.data.item}">
                                         <td th:text="${item.item_name}"></td>
                                         <td th:text="${item.kind_name}"></td>
                                         <td th:text="${item.rank}"></td>
@@ -229,7 +242,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:if="${items4}" th:each="item: ${items4.data.item}">
+                                    <tr th:if="${items3}" th:each="item: ${items3.data.item}">
                                         <td th:text="${item.item_name}"></td>
                                         <td th:text="${item.kind_name}"></td>
                                         <td th:text="${item.rank}"></td>
@@ -353,19 +366,37 @@
 <script src="/js/main.js"></script>
 
 <script>
-    document.getElementById("put-cart").addEventListener('click', function () {
-        const productId = this.getAttribute('data-product-id');
-        const farmId = this.getAttribute('data-farm-id');
-        const user = getCookie('id');
-        const data = getProductInfo(productId, farmId);
-        // if (user !== null) {
-        //     // post
-        //     postRequest({userId: user, productId: productId, quantity: document.getElementById("quantity").value});
-        //     return;
-        // }
-        saveProductToCookie(data);
-    });
 
+    // local storage
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     fetch('/api/market-price')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             data.forEach((entry, index) => {
+    //                 let name = 'items' + (index + 1);
+    //                 let itemList = document.getElementById(name);
+    //                 console.log('entry: ' + entry.data);
+    //                 const items = entry.data[index].item;
+    //                 console.log('items: ' + items);
+    //                 items.forEach(item => {
+    //                     const item_name = document.createElement('td');
+    //                     const kind_name = document.createElement('td');
+    //                     const rank = document.createElement('td');
+    //                     const dpr2 = document.createElement('td');
+    //                     item_name.textContent = item.item_name;
+    //                     kind_name.textContent = item.kind_name;
+    //                     rank.textContent = item.rank;
+    //                     dpr2.textContent = item.dpr2;
+    //                     itemList.appendChild(item_name);
+    //                     itemList.appendChild(kind_name);
+    //                     itemList.appendChild(rank);
+    //                     itemList.appendChild(dpr2);
+    //                 });
+    //             })
+    //         }).catch(error => {
+    //         console.error(error);
+    //     });
+    // });
 
     $(document).ready(function () {
 

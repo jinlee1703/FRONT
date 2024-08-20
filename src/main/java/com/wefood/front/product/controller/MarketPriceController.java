@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Controller
@@ -18,29 +16,28 @@ import java.util.List;
 public class MarketPriceController {
 
     private final MarketPriceService marketPriceService;
-    private static final String cookieName = "price";
 
     public MarketPriceController(MarketPriceService marketPriceService) {
         this.marketPriceService = marketPriceService;
     }
 
     @GetMapping
-    public String getMarketPrice(Model model, @CookieValue(name = cookieName, required = false) String price, HttpServletResponse response) {
-
-        List<MarketPriceResponse> marketPrice;
-        if (price == null) {
-            System.out.println("cookie x");
-            marketPrice = marketPriceService.readValue(marketPriceService.getMarketPrice());
-//            marketPriceService.setCookie(response, cookieName, marketPriceService.writeValue(marketPrice));
+    public String getMarketPrice(Model model, @CookieValue(name = "price0", required = false) String price0, @CookieValue(name = "price1", required = false) String price1, @CookieValue(name = "price2", required = false) String price2, @CookieValue(name = "price3", required = false) String price3, HttpServletResponse response) {
+        if (price1 == null) {
+            List<MarketPriceResponse> prices = marketPriceService.saveMarketPrice(response, "price");
+//            String cookieName = "price";
+            for (int i = 0; i < prices.size(); i++) {
+//                marketPrice = marketPriceService.readValue(prices.get(i));
+//                String compressed = marketPriceService.compress(marketPriceService.writeValue(marketPrice));
+//                marketPriceService.setCookie(response, cookieName + i, compressed);
+                model.addAttribute("items" + i, prices.get(i));
+            }
         } else {
-            System.out.println("cookie o");
-            marketPrice = marketPriceService.readValue(URLDecoder.decode(price, StandardCharsets.UTF_8));
+            model.addAttribute("items0", marketPriceService.readValue(marketPriceService.decompress(price0)));
+            model.addAttribute("items1", marketPriceService.readValue(marketPriceService.decompress(price1)));
+            model.addAttribute("items2", marketPriceService.readValue(marketPriceService.decompress(price2)));
+            model.addAttribute("items3", marketPriceService.readValue(marketPriceService.decompress(price3)));
         }
-
-        model.addAttribute("items1", marketPrice.get(0));
-        model.addAttribute("items2", marketPrice.get(1));
-        model.addAttribute("items3", marketPrice.get(2));
-        model.addAttribute("items4", marketPrice.get(3));
 
         return "/market-price";
     }

@@ -1,12 +1,13 @@
 package com.wefood.front.product.controller;
 
 import com.wefood.front.global.PageRequest;
-import com.wefood.front.product.dto.ProductDetailResponse;
-import com.wefood.front.product.dto.ProductImageResponse;
-import com.wefood.front.product.dto.ProductResponse;
+import com.wefood.front.product.dto.*;
+import com.wefood.front.product.service.MarketPriceService;
 import com.wefood.front.product.service.ProductService;
 import com.wefood.front.user.adaptor.UserAdaptor;
 import com.wefood.front.user.dto.response.AddressResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final MarketPriceService marketPriceService;
 
     private final UserAdaptor userAdaptor;
 
@@ -42,12 +44,12 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id) {
+    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id, HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "price0", required = false) String item) {
         List<String> img = new ArrayList<>();
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
+
         // sequence대로 정렬
         productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
-
         for (ProductImageResponse image : productDetail.getImg()) {
             if (image.getIsThumbnail()) {
                 model.addAttribute("thumbnail", image.getImg());
@@ -55,6 +57,14 @@ public class ProductController {
                 img.add(image.getImg());
             }
         }
+
+        if (item == null) {
+            marketPriceService.saveMarketPrice(response, "price");
+        }
+        List<MarketPriceItemResponse> marketPrice = marketPriceService.getMarketPriceCookie(productDetail.getItemId(), request.getCookies());
+        model.addAttribute("marketPrices", marketPrice);
+
+
         model.addAttribute("img", img);
         model.addAttribute("product", productDetail);
 
