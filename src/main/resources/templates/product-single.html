@@ -145,16 +145,6 @@
             <div class="col-lg-6 product-details pl-md-5 ftco-animate" style="display: flex; flex-direction: column;">
                 <div style="flex: 1">
                     <h3 th:text="${product.name}" id="name"></h3>
-                    <div class="rating d-flex">
-                        <p class="text-left mr-4">
-                            <a href="#" class="mr-2">5.0</a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                            <a href="#"><span class="ion-ios-star-outline"></span></a>
-                        </p>
-                    </div>
                     <p class="price" style="display: flex; justify-content: end;">
                         <span th:text="${#numbers.formatInteger(product.price, 3, 'COMMA')}+원" id="price"></span>
                     </p>
@@ -237,12 +227,15 @@
                                             <div class="review-meta">
                                                 <span class="review-author mr-3" th:text="${userName}">작성자 이름</span>
                                                 <span class="review-rating">
-                                <i class="fas fa-star text-warning" th:each="i : ${#numbers.sequence(1, review.score)}"></i>
-                                <i class="far fa-star text-warning" th:each="i : ${#numbers.sequence(1, 5 - review.score)}"></i>
+                                <i class="fas fa-star text-warning"
+                                   th:each="i : ${#numbers.sequence(1, review.score)}"></i>
+                                <i class="far fa-star text-warning"
+                                   th:each="i : ${#numbers.sequence(1, 5 - review.score)}"></i>
                             </span>
                                             </div>
                                         </div>
-                                        <p class="review-content mb-2" th:text="${review.content}">Review content goes here. This is where the customer's detailed feedback will be displayed.</p>
+                                        <p class="review-content mb-2" th:text="${review.content}">Review content goes
+                                            here. This is where the customer's detailed feedback will be displayed.</p>
                                     </div>
                                 </div>
                             </div>
@@ -254,29 +247,36 @@
                             max-height: 600px;
                             overflow-y: auto;
                         }
+
                         .review-item {
                             background-color: #f8f9fa;
                             border-radius: 8px;
                             padding: 15px;
                             transition: all 0.3s ease;
                         }
+
                         .review-item:hover {
-                            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
                         }
+
                         .review-title {
                             color: #007bff;
                             font-weight: 600;
                         }
+
                         .review-meta {
                             font-size: 0.9rem;
                         }
+
                         .review-author {
                             font-weight: 600;
                             color: #28a745;
                         }
+
                         .review-rating {
                             font-size: 1rem;
                         }
+
                         .review-content {
                             font-size: 0.95rem;
                             line-height: 1.6;
