@@ -76,22 +76,29 @@
 
 <section class="ftco-section ftco-degree-bg">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="text-center mb-4">리뷰 목록</h2>
                 <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                        <thead class="thead-dark">
-                        <tr class="text-center">
+                    <table class="table table-hover">
+                        <thead class="thead-green">
+                        <tr>
                             <th>제목</th>
                             <th>본문</th>
-                            <th>점수</th>
+                            <th>평점</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="review : ${reviewList}">
-                            <td th:text="${review.title}"></td>
-                            <td th:text="${review.content()}"></td>
-                            <td th:text="${review.score}"></td>
+                            <td>
+                                <a th:href="@{'/review/' + ${review.id}}" class="review-title" th:text="${review.title}"></a>
+                            </td>
+                            <td>
+                                <p class="review-content" th:text="${#strings.abbreviate(review.content, 100)}"></p>
+                            </td>
+                            <td>
+                                <div class="stars" th:attr="data-rating=${review.score}"></div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -99,7 +106,57 @@
             </div>
         </div>
     </div>
-</section> <!-- .section -->
+</section>
+
+<style>
+    .ftco-section {
+        background-color: #f8f9fa;
+        padding: 5rem 0;
+    }
+    .table {
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .thead-green {
+        background-color: #28a745;
+        color: #fff;
+    }
+    .table th, .table td {
+        vertical-align: middle;
+        padding: 1rem;
+    }
+    .review-title {
+        color: #28a745;
+        font-weight: bold;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    .review-title:hover {
+        color: #1e7e34;
+    }
+    .review-content {
+        margin-bottom: 0;
+        color: #6c757d;
+    }
+    .stars {
+        color: #ffc107;
+        font-size: 1.2rem;
+    }
+    .table-hover tbody tr:hover {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.stars').forEach(function(starsElement) {
+            const rating = parseInt(starsElement.getAttribute('data-rating'));
+            starsElement.innerHTML = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        });
+    });
+</script>
 
 
 <footer class="ftco-footer ftco-section">
