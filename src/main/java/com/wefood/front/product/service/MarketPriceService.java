@@ -111,10 +111,10 @@ public class MarketPriceService {
         MarketPriceResponse response;
         // 200, 400, 500, 100
         switch (String.valueOf(itemId).charAt(0)) {
-            case '1' -> response = readValue(getCookieByName("price3", cookies));
-            case '2' -> response = readValue(getCookieByName("price0", cookies));
-            case '4' -> response = readValue(getCookieByName("price1", cookies));
-            case '5' -> response = readValue(getCookieByName("price2", cookies));
+            case '1' -> response = readValue(decompress(getCookieByName("price3", cookies)));
+            case '2' -> response = readValue(decompress(getCookieByName("price0", cookies)));
+            case '4' -> response = readValue(decompress(getCookieByName("price1", cookies)));
+            case '5' -> response = readValue(decompress(getCookieByName("price2", cookies)));
             default -> {
                 return null;
             }
