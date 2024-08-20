@@ -91,7 +91,7 @@
                         <tbody>
                         <tr th:each="review : ${reviewList}">
                             <td>
-                                <a th:href="@{'/review/' + ${review.id}}" class="review-title" th:text="${review.title}"></a>
+                                <a  class="review-title" th:text="${review.title}"></a>
                             </td>
                             <td>
                                 <p class="review-content" th:text="${#strings.abbreviate(review.content, 100)}"></p>
