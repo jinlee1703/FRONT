@@ -83,6 +83,22 @@ public class OrderAdaptor {
         return responseEntity.getBody().getData();
     }
 
+    public List<ReviewGetResponse> findProductReview(Long id) {
+
+        String url = UriComponentsBuilder.fromHttpUrl(backAdaptorProperties.getAddress() + URL+"/product-review")
+                .queryParam("id", id)
+                .toUriString();
+
+        ResponseEntity<Message<List<ReviewGetResponse>>> responseEntity = restTemplate.exchange(
+                url,
+                GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        return responseEntity.getBody().getData();
+    }
+
     public List<OrderDetailGetResponse> findOrder(Long id) {
 
 

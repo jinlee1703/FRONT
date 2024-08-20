@@ -1,6 +1,8 @@
 package com.wefood.front.product.controller;
 
 import com.wefood.front.global.PageRequest;
+import com.wefood.front.order.adaptor.OrderAdaptor;
+import com.wefood.front.order.dto.ReviewGetResponse;
 import com.wefood.front.product.dto.ProductDetailResponse;
 import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.ProductResponse;
@@ -23,6 +25,8 @@ public class ProductController {
     private final ProductService productService;
 
     private final UserAdaptor userAdaptor;
+
+    private final OrderAdaptor orderAdaptor;
 
     @GetMapping
     public String index(Model model) {
@@ -48,6 +52,9 @@ public class ProductController {
         // sequence대로 정렬
         productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
 
+
+        List<ReviewGetResponse> list = orderAdaptor.findProductReview(productId);
+
         for (ProductImageResponse image : productDetail.getImg()) {
             if (image.getIsThumbnail()) {
                 model.addAttribute("thumbnail", image.getImg());
@@ -57,6 +64,8 @@ public class ProductController {
         }
         model.addAttribute("img", img);
         model.addAttribute("product", productDetail);
+        model.addAttribute("reviewList", list);
+
 
         if (name != null) {
             model.addAttribute("userName", name);

@@ -9,6 +9,7 @@ import com.wefood.front.user.dto.response.AddressResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
 import com.wefood.front.user.dto.response.UserGetResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,66 @@ public class UserController {
     @GetMapping("/login")
     public String loginForm() {
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response) {
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                // "cart" 쿠키를 찾으면
+                if ("id".equals(cookie.getName())) {
+                    // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                    cookie.setMaxAge(0);
+                    // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                    cookie.setPath("/");
+                    // 응답에 쿠키 추가
+                    response.addCookie(cookie);
+                }
+
+                if ("isSeller".equals(cookie.getName())) {
+                    // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                    cookie.setMaxAge(0);
+                    // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                    cookie.setPath("/");
+                    // 응답에 쿠키 추가
+                    response.addCookie(cookie);
+                }
+
+
+                if ("name".equals(cookie.getName())) {
+                    // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                    cookie.setMaxAge(0);
+                    // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                    cookie.setPath("/");
+                    // 응답에 쿠키 추가
+                    response.addCookie(cookie);
+                }
+
+                if ("password".equals(cookie.getName())) {
+                    // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                    cookie.setMaxAge(0);
+                    // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                    cookie.setPath("/");
+                    // 응답에 쿠키 추가
+                    response.addCookie(cookie);
+                }
+
+                if ("phoneNumber".equals(cookie.getName())) {
+                    // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                    cookie.setMaxAge(0);
+                    // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                    cookie.setPath("/");
+                    // 응답에 쿠키 추가
+                    response.addCookie(cookie);
+                }
+
+            }
+        }
+
+        return "redirect:/";
     }
 
     @PostMapping("/login")

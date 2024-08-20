@@ -7,7 +7,9 @@ import com.wefood.front.order.adaptor.OrderAdaptor;
 import com.wefood.front.order.dto.CartResponse;
 import com.wefood.front.order.dto.request.DirectOrderCreateRequest;
 import com.wefood.front.order.dto.request.OrderCreateRequest;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -122,7 +124,9 @@ public class WidgetController {
                                  @RequestParam(required = false) String directPay,
                                  @RequestParam(required = false) String transactionDate,
                                  @CookieValue(name = "cart", required = false) String cart,
-                                 @CookieValue String id) throws Exception {
+                                 @CookieValue String id,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws Exception {
 
         // 값이 있으면 바로구매 한거임
         if (directPay.equals("1")) {
@@ -161,6 +165,22 @@ public class WidgetController {
             } else {
                 // 직거래
                 orderAdaptor.createBasketOrder(new OrderCreateRequest(totalValue, invoiceNumber, receiverPhone, receiverName, receiverAddress, receiverAddressDetail, null, transactionDate), farms, id);
+            }
+
+            Cookie[] cookies = request.getCookies();
+
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    // "cart" 쿠키를 찾으면
+                    if ("cart".equals(cookie.getName())) {
+                        // 쿠키의 유효 기간을 0으로 설정하여 삭제
+                        cookie.setMaxAge(0);
+                        // 쿠키의 경로를 지정해야 정상적으로 삭제됨 (쿠키 설정 시의 경로와 일치해야 함)
+                        cookie.setPath("/");
+                        // 응답에 쿠키 추가
+                        response.addCookie(cookie);
+                    }
+                }
             }
 
         }
