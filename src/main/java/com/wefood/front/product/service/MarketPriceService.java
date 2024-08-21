@@ -107,18 +107,18 @@ public class MarketPriceService {
     }
 
     public List<MarketPriceItemResponse> getMarketPriceCookie(Long itemId, Cookie[] cookies) {
-
         MarketPriceResponse response;
         // 200, 400, 500, 100
         switch (String.valueOf(itemId).charAt(0)) {
             case '1' -> response = readValue(decompress(getCookieByName("price3", cookies)));
             case '2' -> response = readValue(decompress(getCookieByName("price0", cookies)));
             case '4' -> response = readValue(decompress(getCookieByName("price1", cookies)));
-            case '5' -> response = readValue(decompress(getCookieByName("price2", cookies)));
+            case '9' -> response = readValue(decompress(getCookieByName("price2", cookies)));
             default -> {
                 return null;
             }
         }
+
         return response.getData().getItem().stream().filter(item -> item.getItem_code().equals(String.valueOf(itemId))).toList();
     }
 

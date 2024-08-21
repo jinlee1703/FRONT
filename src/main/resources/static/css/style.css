@@ -14687,7 +14687,7 @@ textarea.form-control {
 }
 
 .panel-heading a {
-    padding: 10px 0;
+    padding: 10px 0 10px 5px;
     display: block;
     width: 100%;
     font-size: 16px;
@@ -15020,9 +15020,8 @@ a:hover {
 }
 
 .category-active {
-    color: #1c7430;
-    border: 1px solid;
-    border-radius: 10px;
+    background-color: #1c7430 !important;
+    color: #fff;
 }
 
 .category-inactive {
