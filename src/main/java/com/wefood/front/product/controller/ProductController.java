@@ -4,7 +4,6 @@ import com.wefood.front.global.PageRequest;
 import com.wefood.front.order.adaptor.OrderAdaptor;
 import com.wefood.front.order.dto.ReviewGetResponse;
 import com.wefood.front.product.dto.ProductDetailResponse;
-import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.ProductResponse;
 import com.wefood.front.product.dto.*;
 import com.wefood.front.product.service.MarketPriceService;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -52,31 +49,22 @@ public class ProductController {
 
     @GetMapping("/{productId}")
     public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id, HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "price0", required = false) String item) {
-        List<String> img = new ArrayList<>();
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
 
-        // sequence대로 정렬
-        productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
-
-
-        List<ReviewGetResponse> list = orderAdaptor.findProductReview(productId);
-
-        for (ProductImageResponse image : productDetail.getImg()) {
-            if (image.getIsThumbnail()) {
-                model.addAttribute("thumbnail", image.getImg());
-            } else {
-                img.add(image.getImg());
-            }
-        }
 
         if (item == null) {
-            marketPriceService.saveMarketPrice(response, "price");
+            List<MarketPriceResponse> marketPriceResponses = marketPriceService.saveMarketPrice(response, "price");
+
         }
         List<MarketPriceItemResponse> marketPrice = marketPriceService.getMarketPriceCookie(productDetail.getItemId(), request.getCookies());
+
+        List<ReviewGetResponse> list = orderAdaptor.findProductReview(productId);
         model.addAttribute("marketPrices", marketPrice);
 
 
-        model.addAttribute("img", img);
+        model.addAttribute("thumbnail", productDetail.getProductImg().get(0).getImg());
+        model.addAttribute("productImgs", productDetail.getProductImg().subList(1, productDetail.getProductImg().size()));
+        model.addAttribute("farmImgs", productDetail.getFarmImg());
         model.addAttribute("product", productDetail);
         model.addAttribute("reviewList", list);
 
