@@ -51,6 +51,7 @@
         <button class="search-button" type="submit">검색</button>
     </form>
 </div>
+
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
@@ -74,57 +75,148 @@
             </ul>
         </div>
     </div>
-
 </nav><!-- END nav -->
 
+
+<style>
+    .farm-info-card {
+        border: none;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    .farm-info-header {
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        color: white;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .farm-info-body {
+        padding: 30px;
+    }
+    .farm-name {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+    .farm-detail {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+    .carousel-item {
+        height: 400px;
+    }
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    .carousel-caption {
+        background-color: rgba(0,0,0,0.7);
+        border-radius: 5px;
+    }
+    .image-upload-form {
+        margin-top: 30px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .btn-custom {
+        background-color: #4CAF50;
+        border: none;
+        padding: 10px 20px;
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .btn-custom:hover {
+        background-color: #45a049;
+    }
+</style>
 
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-8 ftco-animate">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h3 class="mb-0">회원가입</h3>
+                <div class="farm-info-card">
+                    <div class="farm-info-header">
+                        <h3 class="mb-0" th:text="${farm == null} ? '농가 등록' : '농가 정보'">농가 정보</h3>
                     </div>
-                    <div class="card-body">
-                        <form action="/sign" method="POST" class="billing-form">
+
+                    <div class="farm-info-body">
+                        <!-- 농가 정보가 없는 경우: 등록 폼 표시 -->
+                        <form th:if="${farm == null}" action="/farm-post" method="POST" class="billing-form" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="name">이름</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요" required>
+                                <label for="name">농가 이름</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요" required>
                             </div>
                             <div class="form-group">
-                                <label for="phoneNumber">전화번호</label>
-                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="01012345678 형식으로 입력하세요" required>
+                                <label for="detail">농가 소개</label>
+                                <textarea class="form-control" name="detail" id="detail" rows="8" style="min-height: 200px; resize: vertical;" placeholder="농가에 대한 자세한 소개를 입력하세요" required></textarea>
                             </div>
-                            <div class="form-group">
-                                <label for="password">비밀번호</label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="isSeller">판매자 여부</label>
-                                <select id="isSeller" name="isSeller" class="form-control">
-                                    <option value="yes">예</option>
-                                    <option value="no">아니요</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="accountNumber">계좌번호</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-block">제출</button>
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-custom btn-block">농가 등록하기</button>
                             </div>
                         </form>
+
+                        <!-- 농가 정보가 있는 경우 -->
+                        <div th:if="${farm != null}" class="farm-info-display">
+                            <h4 th:text="${farm.name}" class="farm-name">농가 이름</h4>
+                            <p th:text="${farm.detail}" class="farm-detail">농가 소개</p>
+
+                            <!-- 이미지가 없는 경우 -->
+                            <div th:if="${#lists.isEmpty(farmImage)}" class="image-upload-form">
+                                <h5 class="mb-3">농가 이미지 등록</h5>
+                                <form th:action="@{/farm-image}" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <input type="file" name="images" multiple accept="image/*" class="form-control-file">
+                                    </div>
+                                    <input type="hidden" name="id" th:value="${farm.id}">
+                                    <button type="submit" class="btn btn-custom">이미지 업로드</button>
+                                </form>
+                            </div>
+
+                            <!-- 이미지가 있는 경우 -->
+                            <div th:unless="${#lists.isEmpty(farmImage)}">
+                                <div id="farmImageCarousel" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div th:each="image, iterStat : ${farmImage}" th:class="${iterStat.first} ? 'carousel-item active' : 'carousel-item'">
+                                            <img th:src="${image.img}" class="d-block w-100" th:alt="${farm.name + ' 이미지'}">
+                                            <div class="carousel-caption d-none d-md-block">
+                                                <p th:if="${image.isThumbnail}" class="bg-dark p-2 rounded">대표 이미지</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a class="carousel-control-prev" href="#farmImageCarousel" role="button" data-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">이전</span>
+                                    </a>
+                                    <a class="carousel-control-next" href="#farmImageCarousel" role="button" data-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="sr-only">다음</span>
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section> <!-- .section -->
+</section>
 
-
-<h1>5000+++</h1>
-
+<script>
+    $(document).ready(function(){
+        $('#farmImageCarousel').carousel({
+            interval: 5000 // 5초마다 자동으로 슬라이드
+        });
+    });
+</script>
 
 
 <footer class="ftco-footer ftco-section">
