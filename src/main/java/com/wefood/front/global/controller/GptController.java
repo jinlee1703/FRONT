@@ -67,11 +67,8 @@ public class GptController {
             @NotNull @RequestParam("input") String input) {
 
 
-        System.out.println("?!?!!!!!!!");
-        System.out.println(input);
-
         String response = chatGPTService.farmChat(model, endpointCharged, isProduct, input);
-        System.out.println(response);
+        System.out.println("결과 값: " + response);
 
         Map<String, String> result = new HashMap<>();
         result.put("response", response);

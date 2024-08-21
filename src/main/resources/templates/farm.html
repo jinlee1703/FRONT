@@ -83,19 +83,19 @@
     /* input 태그 스타일 수정 */
     .form-control {
         font-size: 1.1rem;
-        color: #000000;  /* 입력 텍스트 색상을 검정색으로 변경 */
-        background-color: #ffffff;  /* 배경색을 흰색으로 변경 */
-        border: 2px solid #ced4da;  /* 테두리를 더 굵게 설정 */
+        color: #000000; /* 입력 텍스트 색상을 검정색으로 변경 */
+        background-color: #ffffff; /* 배경색을 흰색으로 변경 */
+        border: 2px solid #ced4da; /* 테두리를 더 굵게 설정 */
         border-radius: 5px;
-        padding: 12px 15px;  /* 패딩을 약간 증가 */
+        padding: 12px 15px; /* 패딩을 약간 증가 */
         transition: all 0.3s ease;
-        font-weight: 500;  /* 글꼴 두께를 약간 증가 */
+        font-weight: 500; /* 글꼴 두께를 약간 증가 */
     }
 
     .form-control:focus {
         border-color: #4CAF50;
         box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
-        background-color: #f8f8f8;  /* 포커스 시 배경색 약간 변경 */
+        background-color: #f8f8f8; /* 포커스 시 배경색 약간 변경 */
     }
 
     .form-control::placeholder {
@@ -108,7 +108,7 @@
         font-weight: 600;
         color: #333333;
         margin-bottom: 0.5rem;
-        font-size: 1.05rem;  /* 라벨 크기 약간 증가 */
+        font-size: 1.05rem; /* 라벨 크기 약간 증가 */
     }
 
     /* 입력 필드 hover 효과 */
@@ -341,7 +341,7 @@
 <section class="ftco-section">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-xl-8 ftco-animate">
+            <div class="col-xl-12 ftco-animate">
                 <div class="farm-info-card">
                     <div class="farm-info-header">
                         <h3 class="mb-0" th:text="${farm == null} ? '농가 등록' : '농가 정보'">농가 정보</h3>
@@ -353,20 +353,21 @@
                               enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="name">농가 이름</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요 "
+                                <input type="text" class="form-control" name="name" id="name"
+                                       placeholder="농가 이름을 입력하세요. 예: 철수네,영희네"
                                        required>
                             </div>
 
                             <div class="form-group">
-                                <label for="mainCrop">주요 작물</label>
+                                <label for="mainCrop">주요 상품</label>
                                 <input type="text" class="form-control" name="mainCrop" id="mainCrop"
-                                       placeholder="주로 재배하는 작물을 입력하세요" required>
+                                       placeholder="주로 판매하는 상품을 입력하세요. 예: 고구마,감자,돼지고기,소고기" required>
                             </div>
 
                             <div class="form-group">
                                 <label for="location">농가 위치</label>
                                 <input type="text" class="form-control" name="location" id="location"
-                                       placeholder="농가가 위치한 지역을 입력하세요" required>
+                                       placeholder="농가가 위치한 지역을 입력하세요. 예: 강원도 춘천" required>
                             </div>
 
                             <div class="form-group">
@@ -380,37 +381,45 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="eco" value="친환경 농법 사용">
+                                            <input class="form-check-input" type="checkbox" name="features" id="eco"
+                                                   value="친환경 농법 사용">
                                             <label class="form-check-label" for="eco">친환경 농법 사용</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="family" value="가족 대대로 이어온 농장">
+                                            <input class="form-check-input" type="checkbox" name="features" id="family"
+                                                   value="가족 대대로 이어온 농장">
                                             <label class="form-check-label" for="family">가족 대대로 이어온 농장</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="certified" value="품질 인증 보유">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="certified" value="품질 인증 보유">
                                             <label class="form-check-label" for="certified">품질 인증 보유</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="direct" value="직거래 판매">
+                                            <input class="form-check-input" type="checkbox" name="features" id="direct"
+                                                   value="직거래 판매">
                                             <label class="form-check-label" for="direct">직거래 판매</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="organic" value="유기농 재배">
+                                            <input class="form-check-input" type="checkbox" name="features" id="organic"
+                                                   value="유기농 재배">
                                             <label class="form-check-label" for="organic">유기농 재배</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="speciality" value="특산품 재배">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="speciality" value="특산품 재배">
                                             <label class="form-check-label" for="speciality">특산품 재배</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="tech" value="스마트팜 기술 도입">
+                                            <input class="form-check-input" type="checkbox" name="features" id="tech"
+                                                   value="스마트팜 기술 도입">
                                             <label class="form-check-label" for="tech">스마트팜 기술 도입</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" name="features" id="experience" value="농촌 체험 프로그램 운영">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="experience" value="농촌 체험 프로그램 운영">
                                             <label class="form-check-label" for="experience">농촌 체험 프로그램 운영</label>
                                         </div>
                                     </div>
@@ -423,7 +432,9 @@
         <textarea class="form-control mb-2" id="detail" name="detail" rows="6"
                   style="min-height: 150px; resize: vertical;"
                   placeholder="자동으로 생성된 소개글이 여기에 표시됩니다. 필요한 경우 직접 수정할 수 있습니다."></textarea>
-                                    <button type="button" class="btn btn-primary align-self-end" id="generateIntroBtn">소개글 자동 생성</button>
+                                    <button type="button" class="btn btn-primary align-self-end" id="generateIntroBtn">
+                                        소개글 자동 생성
+                                    </button>
                                 </div>
                             </div>
 
@@ -439,7 +450,8 @@
                                 <div class="farm-info-content">
                                     <h4 th:text="${farm.name}" class="farm-name">농가 이름</h4>
                                     <div class="farm-detail-container">
-                                        <p th:text="${farm.detail}" class="farm-detail">농가 소개</p>
+                                        <!--                                        <p th:text="${farm.detail}" class="farm-detail">농가 소개</p>-->
+                                        <p th:utext="${farm.detail}" class="farm-detail">농가 소개</p>
                                     </div>
                                 </div>
                             </div>
@@ -630,7 +642,6 @@
             });
     });
 </script>
-
 
 
 </body>

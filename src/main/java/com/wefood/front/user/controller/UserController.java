@@ -172,8 +172,14 @@ public class UserController {
             List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
             // sequence대로 정렬
             farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+            farmResponse.setDetail(farmResponse.getDetail().replace("\n", "<br>"));
             model.addAttribute("farmImage", farmImage);
         }
+
+
+
+
+
 
 
         model.addAttribute("farm", farmResponse);

@@ -37,7 +37,7 @@ public class GptService {
 
     private String GPT_PRODUCT = "1. 응답형태 = data:{name:String, detail:String, tag:List<String>} 형태의 json을 원함 바로 자바에서 dto로 형변환 할 수 있게 \\n 2. name = 상품의 이름이야. 너에게 원하는건 농가이름과 상품의 강조하고싶은 점 + 이쁘게 여러형용사 사용 \\n 3. detail = 상품의 소개야. 강조하고싶은 점과 너의 생각으로 자세하게 작성해주면 좋겟어(100자)_\\n 4. tags = 강조하고싶은 점을 이용하여 어울리는 태그를 만들어줘 \\n 5. 상품 품종 = %s \\n 6. 강조하고 싶은점 = %s \\n 7. 농가 이름 = %s";
 
-    private String GPT_FARM = "[data : %s]  1. data를 이용 , 2.  농산품을 판매하는 농가의 소개를 작성 , 3. 사람에게 말하듯 친숙한 말투로 생성 , 4.  완성된 응답은 detail:String 형태의 json 의 형태로 반환.";
+    private String GPT_FARM = "[data : %s]  1. data를 이용 , 2.  농산품을 판매하는 농가의 소개를 작성 , 3. 사람에게 말하듯 친숙한 말투로 생성 , 4. 줄바꿈은 \\n 을 통해서 할 것 , 5. 완성된 응답은 detail:String 형태의 json 의 형태로 반환.";
 
     public GptService(@Qualifier("gptRestTemplate") RestTemplate restTemplate,
                       ObjectMapper objectMapper) {
@@ -131,12 +131,11 @@ public class GptService {
     }
 
     public String farmChat(String model, String endpointCharged, boolean isProduct,
-                         String... inputs) {
+                           String... inputs) {
 
 
         String prompt = preprocessing(isProduct, inputs);
 
-        System.out.println("프롬포트@?@?@?@#?#?#?#?#?#");
         System.out.println(prompt);
 
         List<GptMessage> prompts = List.of(new GptMessage("user", prompt));
