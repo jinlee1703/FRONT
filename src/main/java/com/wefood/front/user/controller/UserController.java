@@ -163,13 +163,16 @@ public class UserController {
 
         FarmResponse farmResponse = userAdaptor.getFarm(id);
 
-        List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
+        if (farmResponse != null) {
+            List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
+            // sequence대로 정렬
+            farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+            model.addAttribute("farmImage", farmImage);
+        }
 
-        // sequence대로 정렬
-        farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+
 
         model.addAttribute("farm", farmResponse);
-        model.addAttribute("farmImage", farmImage);
 
         return "farm";
     }
