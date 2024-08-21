@@ -1,7 +1,7 @@
 package com.wefood.front.user.controller;
 
+import com.wefood.front.product.dto.ImageResponse;
 import com.wefood.front.product.dto.ProductDetailResponse;
-import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.UploadImageRequestDto;
 import com.wefood.front.user.adaptor.UserAdaptor;
 import com.wefood.front.user.dto.request.*;
@@ -163,13 +163,10 @@ public class UserController {
 
         FarmResponse farmResponse = userAdaptor.getFarm(id);
 
-        List<ProductImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
-
-        System.out.println("?!!!!!");
-        System.out.println(farmImage.size());
+        List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
 
         // sequence대로 정렬
-        farmImage.sort(Comparator.comparingInt(ProductImageResponse::getSequence));
+        farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
 
         model.addAttribute("farm", farmResponse);
         model.addAttribute("farmImage", farmImage);

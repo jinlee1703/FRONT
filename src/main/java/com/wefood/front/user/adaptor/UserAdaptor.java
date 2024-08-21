@@ -3,7 +3,7 @@ package com.wefood.front.user.adaptor;
 
 import com.wefood.front.config.BackAdaptorProperties;
 import com.wefood.front.global.Message;
-import com.wefood.front.product.dto.ProductImageResponse;
+import com.wefood.front.product.dto.ImageResponse;
 import com.wefood.front.product.dto.UploadImageRequestDto;
 import com.wefood.front.user.dto.request.*;
 import com.wefood.front.user.dto.response.AddressResponse;
@@ -117,14 +117,14 @@ public class UserAdaptor {
         }
     }
 
-    public List<ProductImageResponse> getFarmImage(Long id) {
+    public List<ImageResponse> getFarmImage(Long id) {
 
         String baseUrl = backAdaptorProperties.getAddress() + "/api/farm/image";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .queryParam("id", id);
 
-        ResponseEntity<Message<List<ProductImageResponse>>> responseEntity = restTemplate.exchange(
+        ResponseEntity<Message<List<ImageResponse>>> responseEntity = restTemplate.exchange(
                 builder.toUriString(),
                 HttpMethod.GET,
                 null,
