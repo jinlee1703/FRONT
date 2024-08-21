@@ -1,13 +1,11 @@
 package com.wefood.front.order.controller;
 
-import com.wefood.front.global.Message;
 import com.wefood.front.order.adaptor.OrderAdaptor;
-import com.wefood.front.order.dto.ReviewGetResponse;
 import com.wefood.front.order.dto.request.ReviewCreateRequest;
 import com.wefood.front.order.dto.response.OrderDetailGetResponse;
 import com.wefood.front.product.adaptor.ProductAdaptor;
 import com.wefood.front.product.dto.ProductDetailResponse;
-import com.wefood.front.product.dto.ProductImageResponse;
+import com.wefood.front.product.dto.ImageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,16 +61,16 @@ public class OrderController {
         model.addAttribute("orderDetailList", orderDetailGetResponseList);
 
         List<ProductDetailResponse> productDetailResponseList = new ArrayList<>();
-        List<ProductImageResponse> productImageResponseList = new ArrayList<>();
+        List<ImageResponse> productImageResponseList = new ArrayList<>();
         for (OrderDetailGetResponse orderDetailGetResponse : orderDetailGetResponseList) {
 
             ProductDetailResponse productDetailResponse = productAdaptor.getProductDetail(orderDetailGetResponse.productId()).getData();
             productDetailResponseList.add(productDetailResponse);
 
-            List<ProductImageResponse> img = productDetailResponse.getImg();
-            for (ProductImageResponse productImageResponse : img) {
-                if (productImageResponse.getIsThumbnail()) {
-                    productImageResponseList.add(productImageResponse);
+            List<ImageResponse> img = productDetailResponse.getProductImg();
+            for (ImageResponse imageResponse : img) {
+                if (imageResponse.getIsThumbnail()) {
+                    productImageResponseList.add(imageResponse);
                     break;
                 }
             }

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>우리음식 :: 농가와 소비자를 잇다</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+
+    <link rel="stylesheet" href="/css/aos.css">
+
+    <link rel="stylesheet" href="/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="/css/jquery.timepicker.css">
+
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+            crossorigin="anonymous"></script>
+    <style>
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 6px 15px;
+        }
+
+        th {
+            background: #42444e;
+            color: #fff;
+            text-align: left;
+        }
+
+        tr:first-child th:first-child {
+            border-top-left-radius: 6px;
+        }
+
+        tr:first-child th:last-child {
+            border-top-right-radius: 6px;
+        }
+
+        td {
+            border-right: 1px solid #c6c9cc;
+            border-bottom: 1px solid #c6c9cc;
+        }
+
+        td:first-child {
+            border-left: 1px solid #c6c9cc;
+        }
+
+        tr:nth-child(even) td {
+            background: #eaeaed;
+        }
+
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 6px;
+        }
+
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 6px;
+        }
+
+        .nav-area {
+            width: 24.5% !important;
+        }
+    </style>
+</head>
+<body class="goto-here">
+<!--회원가입, 로그인, 로그아웃, 마이페이지-->
+<div class="container user-head" th:if="${login}">
+    <a href="/wish-list">좋아요</a>
+    <a href="/mypage">마이페이지</a>
+    <a href="/logout">로그아웃</a>
+</div>
+<div class="container user-head" th:unless="${login}">
+    <a href="/sign">회원가입</a>
+    <a href="/login">로그인</a>
+</div>
+
+<!--검색창-->
+<div class="container" style="display: flex; justify-content: space-between; align-items: center">
+    <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" class="logo-img"></a>
+    <form action="/search" method="get" class="search-container" style="height: 100%">
+        <input class="search-input" name="search_word" type="text" placeholder="">
+        <button class="search-button" type="submit">검색</button>
+    </form>
+</div>
+<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="oi oi-menu">메뉴</span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav" style="justify-content: center">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a href="/" class="nav-link">홈</a></li>
+                <li class="nav-item"><a href="/market-price" class="nav-link">시세 조회</a></li>
+                <li class="nav-item"><a href="/search/category/1" class="nav-link">신선 채소</a></li>
+                <li class="nav-item"><a href="/search/category/2" class="nav-link">신선 과일</a></li>
+                <li class="nav-item"><a href="/search/category/3" class="nav-link">축산물</a></li>
+                <li class="nav-item"><a href="/search/category/5" class="nav-link">먹거리 작물</a></li>
+                <li class="nav-item"><a href="/search/category/4" class="nav-link">가공식품</a></li>
+                <li class="nav-item cta cta-colored">
+                    <a href="/cart" class="nav-link">
+                        <span class="icon-shopping_cart"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- END nav -->
+
+
+<!--product-->
+<section class="ftco-section">
+
+    <div class="container">
+        <div class="row mt-5" style="margin-top: 10rem !important;">
+            <div class="col-md-12 nav-link-wrap">
+                <div class="nav nav-pills d-flex text-center" id="v-pills-tab" role="tablist"
+                     aria-orientation="vertical">
+                    <a class="nav-link ftco-animate active mr-lg-1 nav-area" id="v-pills-1-tab" data-toggle="pill"
+                       href="#v-pills-1" role="tab" aria-controls="v-pills-1" aria-selected="true">채소류</a>
+
+                    <a class="nav-link ftco-animate mr-lg-1 nav-area" id="v-pills-2-tab" data-toggle="pill"
+                       href="#v-pills-2"
+                       role="tab" aria-controls="v-pills-2" aria-selected="false">과일류</a>
+
+                    <a class="nav-link ftco-animate nav-area mr-lg-1" id="v-pills-3-tab" data-toggle="pill"
+                       href="#v-pills-3" role="tab"
+                       aria-controls="v-pills-3" aria-selected="false">축산물</a>
+
+                    <a class="nav-link ftco-animate nav-area" id="v-pills-4-tab" data-toggle="pill" href="#v-pills-4"
+                       role="tab"
+                       aria-controls="v-pills-4" aria-selected="false">먹거리 작물(곡류·감자류)</a>
+
+                </div>
+            </div>
+
+            <div class="col-md-12 tab-wrap">
+                <div class="tab-content bg-light" id="v-pills-tabContent">
+                    <!--1-->
+                    <div class="tab-pane fade show active" id="v-pills-1" role="tabpanel" aria-labelledby="day-1-tab">
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>품목명</th>
+                                        <th>품종명</th>
+                                        <th>상품 등급</th>
+                                        <th>도매 가격</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${items0}" th:each="item: ${items0.data.item}">
+                                        <td th:text="${item.item_name}"></td>
+                                        <td th:text="${item.kind_name}"></td>
+                                        <td th:text="${item.rank}"></td>
+                                        <td th:text="${item.dpr2}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--2-->
+                    <div class="tab-pane fade" id="v-pills-2" role="tabpanel" aria-labelledby="v-pills-day-2-tab">
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>품목명</th>
+                                        <th>품종명</th>
+                                        <th>상품 등급</th>
+                                        <th>도매 가격</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${items1}" th:each="item: ${items1.data.item}">
+                                        <td th:text="${item.item_name}"></td>
+                                        <td th:text="${item.kind_name}"></td>
+                                        <td th:text="${item.rank}"></td>
+                                        <td th:text="${item.dpr2}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!--3-->
+                    <div class="tab-pane fade" id="v-pills-3" role="tabpanel" aria-labelledby="v-pills-day-3-tab">
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>품목명</th>
+                                        <th>품종명</th>
+                                        <th>상품 등급</th>
+                                        <th>도매 가격</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${items2}" th:each="item: ${items2.data.item}">
+                                        <td th:text="${item.item_name}"></td>
+                                        <td th:text="${item.kind_name}"></td>
+                                        <td th:text="${item.rank}"></td>
+                                        <td th:text="${item.dpr2}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-4" role="tabpanel" aria-labelledby="v-pills-4-tab">
+                        <div class="p-4">
+                            <div class="mb-4">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>품목명</th>
+                                        <th>품종명</th>
+                                        <th>상품 등급</th>
+                                        <th>도매 가격</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:if="${items3}" th:each="item: ${items3.data.item}">
+                                        <td th:text="${item.item_name}"></td>
+                                        <td th:text="${item.kind_name}"></td>
+                                        <td th:text="${item.rank}"></td>
+                                        <td th:text="${item.dpr2}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="ftco-footer ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="mouse">
+                <a href="#" class="mouse-icon">
+                    <div class="mouse-wheel"><span class="ion-ios-arrow-up"></span></div>
+                </a>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">전국로컬푸드 우리음식</h2>
+                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4 ml-md-5">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="py-2 d-block">우리음식 소개</a></li>
+                        <li><a href="#" class="py-2 d-block">이용안내</a></li>
+                        <li><a href="#" class="py-2 d-block">개인정보처리방침</a></li>
+                        <li><a href="#" class="py-2 d-block">이용약관</a></li>
+                        <li><a href="#" class="py-2 d-block">고객센터</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--            <div class="col-md-4">-->
+            <!--                <div class="ftco-footer-widget mb-4">-->
+            <!--                    <h2 class="ftco-heading-2">Help</h2>-->
+            <!--                    <div class="d-flex">-->
+            <!--                        <ul class="list-unstyled mr-l-5 pr-l-3 mr-4">-->
+            <!--                            <li><a href="#" class="py-2 d-block">Shipping Information</a></li>-->
+            <!--                            <li><a href="#" class="py-2 d-block">Returns &amp; Exchange</a></li>-->
+            <!--                            <li><a href="#" class="py-2 d-block">Terms &amp; Conditions</a></li>-->
+            <!--                            <li><a href="#" class="py-2 d-block">Privacy Policy</a></li>-->
+            <!--                        </ul>-->
+            <!--                        <ul class="list-unstyled">-->
+            <!--                            <li><a href="#" class="py-2 d-block">FAQs</a></li>-->
+            <!--                            <li><a href="#" class="py-2 d-block">Contact</a></li>-->
+            <!--                        </ul>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <div class="block-23 mb-3">
+                        <ul>
+                            <li><span class="icon icon-map-marker"></span>
+                                <span class="text">춘천시 평화로 25 (근화동 199)</span>
+                            </li>
+                            <li><a href="#"><span class="icon icon-phone"></span><span
+                                    class="text">+82 033) 257-7800</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    All rights reserved | This template is made with <i class="icon-heart color-danger"
+                                                                        aria-hidden="true"></i> by <a
+                            href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- loader -->
+<div id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00"/>
+    </svg>
+</div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.stellar.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/jquery.animateNumber.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/scrollax.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+<script src="/js/google-map.js"></script>
+<script src="/js/main.js"></script>
+
+<script>
+
+    // local storage
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     fetch('/api/market-price')
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             data.forEach((entry, index) => {
+    //                 let name = 'items' + (index + 1);
+    //                 let itemList = document.getElementById(name);
+    //                 console.log('entry: ' + entry.data);
+    //                 const items = entry.data[index].item;
+    //                 console.log('items: ' + items);
+    //                 items.forEach(item => {
+    //                     const item_name = document.createElement('td');
+    //                     const kind_name = document.createElement('td');
+    //                     const rank = document.createElement('td');
+    //                     const dpr2 = document.createElement('td');
+    //                     item_name.textContent = item.item_name;
+    //                     kind_name.textContent = item.kind_name;
+    //                     rank.textContent = item.rank;
+    //                     dpr2.textContent = item.dpr2;
+    //                     itemList.appendChild(item_name);
+    //                     itemList.appendChild(kind_name);
+    //                     itemList.appendChild(rank);
+    //                     itemList.appendChild(dpr2);
+    //                 });
+    //             })
+    //         }).catch(error => {
+    //         console.error(error);
+    //     });
+    // });
+
+    $(document).ready(function () {
+
+        var quantitiy = 0;
+        $('.quantity-right-plus').click(function (e) {
+
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+
+            // If is not undefined
+
+            $('#quantity').val(quantity + 1);
+
+
+            // Increment
+
+        });
+
+        $('.quantity-left-minus').click(function (e) {
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
+
+            // If is not undefined
+
+            // Increment
+            if (quantity > 0) {
+                $('#quantity').val(quantity - 1);
+            }
+        });
+
+    });
+</script>
+
+</body>
+</html>
