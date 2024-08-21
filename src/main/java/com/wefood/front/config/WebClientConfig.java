@@ -14,7 +14,7 @@ import java.time.Duration;
 @Configuration
 public class WebClientConfig implements WebMvcConfigurer {
 
-    @Bean
+    @Bean(name = "restTemplate")
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
                 .setConnectTimeout(Duration.ofSeconds(3L))
