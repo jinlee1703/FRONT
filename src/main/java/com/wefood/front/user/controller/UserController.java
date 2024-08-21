@@ -27,6 +27,11 @@ public class UserController {
 
     private final UserAdaptor userAdaptor;
 
+    @GetMapping("/sign-tutorial")
+    public String tutorialSignup() {
+        return "sign-tutorial";
+    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "login";
@@ -169,7 +174,6 @@ public class UserController {
             farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
             model.addAttribute("farmImage", farmImage);
         }
-
 
 
         model.addAttribute("farm", farmResponse);
