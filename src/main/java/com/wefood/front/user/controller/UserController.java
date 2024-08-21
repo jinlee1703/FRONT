@@ -1,11 +1,12 @@
 package com.wefood.front.user.controller;
 
+import com.wefood.front.product.dto.ImageResponse;
+import com.wefood.front.product.dto.ProductDetailResponse;
+import com.wefood.front.product.dto.UploadImageRequestDto;
 import com.wefood.front.user.adaptor.UserAdaptor;
-import com.wefood.front.user.dto.request.AddressRequest;
-import com.wefood.front.user.dto.request.LoginRequest;
-import com.wefood.front.user.dto.request.SignRequest;
-import com.wefood.front.user.dto.request.UserGetRequest;
+import com.wefood.front.user.dto.request.*;
 import com.wefood.front.user.dto.response.AddressResponse;
+import com.wefood.front.user.dto.response.FarmResponse;
 import com.wefood.front.user.dto.response.LoginResponse;
 import com.wefood.front.user.dto.response.UserGetResponse;
 import jakarta.servlet.http.Cookie;
@@ -15,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request,HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
 
         Cookie[] cookies = request.getCookies();
 
@@ -154,6 +157,36 @@ public class UserController {
         userAdaptor.signUp(signRequest);
         return "redirect:/";
     }
+
+    @GetMapping("/farm")
+    public String farmForm(@CookieValue Long id, Model model) {
+
+        FarmResponse farmResponse = userAdaptor.getFarm(id);
+
+        List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
+
+        // sequence대로 정렬
+        farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+
+        model.addAttribute("farm", farmResponse);
+        model.addAttribute("farmImage", farmImage);
+
+        return "farm";
+    }
+
+    @PostMapping("/farm-post")
+    public String farmPost(@CookieValue Long id, @ModelAttribute FarmRequest farmRequest) {
+        userAdaptor.farmCreate(farmRequest, id);
+        return "redirect:/farm";
+    }
+
+
+    @PostMapping("/farm-image")
+    public String farmImage(@RequestParam("images") MultipartFile[] files, @RequestParam Long id) throws IOException {
+        userAdaptor.farmImageCreate(files, id);
+        return "redirect:/";
+    }
+
 
     @PostMapping("/{id}/address")
     public String address(@ModelAttribute AddressRequest addressRequest, @PathVariable String id) {

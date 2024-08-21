@@ -4,18 +4,19 @@ import com.wefood.front.global.PageRequest;
 import com.wefood.front.order.adaptor.OrderAdaptor;
 import com.wefood.front.order.dto.ReviewGetResponse;
 import com.wefood.front.product.dto.ProductDetailResponse;
-import com.wefood.front.product.dto.ProductImageResponse;
 import com.wefood.front.product.dto.ProductResponse;
+import com.wefood.front.product.dto.*;
+import com.wefood.front.product.service.MarketPriceService;
 import com.wefood.front.product.service.ProductService;
 import com.wefood.front.user.adaptor.UserAdaptor;
 import com.wefood.front.user.dto.response.AddressResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -23,6 +24,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+    private final MarketPriceService marketPriceService;
 
     private final UserAdaptor userAdaptor;
 
@@ -46,23 +48,23 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id) {
-        List<String> img = new ArrayList<>();
+    public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id, HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "price0", required = false) String item) {
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
-        // sequence대로 정렬
-        productDetail.getImg().sort(Comparator.comparingInt(ProductImageResponse::getSequence));
 
+
+        if (item == null) {
+            List<MarketPriceResponse> marketPriceResponses = marketPriceService.saveMarketPrice(response, "price");
+
+        }
+        List<MarketPriceItemResponse> marketPrice = marketPriceService.getMarketPriceCookie(productDetail.getItemId(), request.getCookies());
 
         List<ReviewGetResponse> list = orderAdaptor.findProductReview(productId);
+        model.addAttribute("marketPrices", marketPrice);
 
-        for (ProductImageResponse image : productDetail.getImg()) {
-            if (image.getIsThumbnail()) {
-                model.addAttribute("thumbnail", image.getImg());
-            } else {
-                img.add(image.getImg());
-            }
-        }
-        model.addAttribute("img", img);
+
+        model.addAttribute("thumbnail", productDetail.getProductImg().get(0).getImg());
+        model.addAttribute("productImgs", productDetail.getProductImg().subList(1, productDetail.getProductImg().size()));
+        model.addAttribute("farmImgs", productDetail.getFarmImg());
         model.addAttribute("product", productDetail);
         model.addAttribute("reviewList", list);
 

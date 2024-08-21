@@ -30,10 +30,14 @@
 
 <!--회원가입, 로그인, 로그아웃, 마이페이지-->
 <div class="container user-head" th:if="${login}">
-    <a href="/wish-list">좋아요</a>
+
+    <th:block th:if="${isSeller}">
+        <a href="/farm">농가정보</a>
+    </th:block>
     <a href="/mypage">마이페이지</a>
     <a href="/logout">로그아웃</a>
 </div>
+
 <div class="container user-head" th:unless="${login}">
     <a href="/sign">회원가입</a>
     <a href="/login">로그인</a>
@@ -106,20 +110,23 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="info-box p-3 border rounded bg-white">
-                                    <h5 class="font-weight-bold"><i class="fas fa-id-badge text-success mr-2"></i>회원구분</h5>
+                                    <h5 class="font-weight-bold"><i class="fas fa-id-badge text-success mr-2"></i>회원구분
+                                    </h5>
                                     <p th:text="${user.isSeller ? '판매회원' : '고객회원'}" class="mb-0 text-muted"></p>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <div class="info-box p-3 border rounded bg-white">
-                                    <h5 class="font-weight-bold"><i class="fas fa-credit-card text-success mr-2"></i>계좌번호</h5>
+                                    <h5 class="font-weight-bold"><i class="fas fa-credit-card text-success mr-2"></i>계좌번호
+                                    </h5>
                                     <p th:text="${user.accountNumber}" class="mb-0 text-muted"></p>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-4">
-                            <h4 class="font-weight-bold"><i class="fas fa-map-marker-alt text-success mr-2"></i>주소 정보</h4>
+                            <h4 class="font-weight-bold"><i class="fas fa-map-marker-alt text-success mr-2"></i>주소 정보
+                            </h4>
                             <div th:if="${address != null}" class="info-box p-3 border rounded bg-white mt-2">
                                 <p><strong>우편번호:</strong> <span th:text="${address.zoneNumber}"></span></p>
                                 <p><strong>주소:</strong> <span th:text="${address.address}"></span></p>
@@ -129,16 +136,20 @@
                                 <p class="alert alert-warning">주소 정보가 없습니다. 아래에서 주소를 등록하세요.</p>
                                 <form th:action="@{|/${id}/address|}" method="POST" class="mt-3">
                                     <div class="form-group">
-                                        <input type="text" id="sample6_postcode" name="zoneNumber" class="form-control" placeholder="우편번호" required>
+                                        <input type="text" id="sample6_postcode" name="zoneNumber" class="form-control"
+                                               placeholder="우편번호" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="button" class="btn btn-secondary btn-block" onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
+                                        <input type="button" class="btn btn-secondary btn-block"
+                                               onclick="sample6_execDaumPostcode()" value="우편번호 찾기">
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" id="sample6_address" name="address" class="form-control" placeholder="주소" required>
+                                        <input type="text" id="sample6_address" name="address" class="form-control"
+                                               placeholder="주소" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" id="sample6_detailAddress" name="detail" class="form-control" placeholder="상세주소" required>
+                                        <input type="text" id="sample6_detailAddress" name="detail" class="form-control"
+                                               placeholder="상세주소" required>
                                     </div>
                                     <button type="submit" class="btn btn-success btn-block">주소 등록</button>
                                 </form>
@@ -168,13 +179,16 @@
     .info-box {
         transition: all 0.3s ease;
     }
+
     .info-box:hover {
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         transform: translateY(-3px);
     }
+
     .btn {
         transition: all 0.3s ease;
     }
+
     .btn:hover {
         transform: translateY(-3px);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
@@ -187,7 +201,7 @@
 <script>
     function sample6_execDaumPostcode() {
         new daum.Postcode({
-            oncomplete: function(data) {
+            oncomplete: function (data) {
                 var addr = ''; // 주소 변수
                 var extraAddr = ''; // 참고항목 변수
 
@@ -220,8 +234,6 @@
         }).open();
     }
 </script>
-
-
 
 
 <footer class="ftco-footer ftco-section">

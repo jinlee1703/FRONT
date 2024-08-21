@@ -51,6 +51,7 @@
         <button class="search-button" type="submit">검색</button>
     </form>
 </div>
+
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
     <div class="container">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
@@ -74,50 +75,244 @@
             </ul>
         </div>
     </div>
-
 </nav><!-- END nav -->
 
 
-<section class="ftco-section ftco-degree-bg">
+<style>
+
+    .farm-info-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .farm-info-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .farm-name {
+        color: #333;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #4CAF50;
+    }
+
+    .farm-detail-container {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .farm-detail {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    .farm-info-card {
+        border: none;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .farm-info-header {
+        background: linear-gradient(135deg, #4CAF50, #45a049);
+        color: white;
+        padding: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .farm-info-body {
+        padding: 30px;
+    }
+
+    .farm-name {
+        color: #333;
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .farm-detail {
+        color: #666;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .carousel-item {
+        height: 400px;
+    }
+
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .carousel-caption {
+        background-color: rgba(0, 0, 0, 0.7);
+        border-radius: 5px;
+    }
+
+    .image-upload-form {
+        margin-top: 30px;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .btn-custom {
+        background-color: #4CAF50;
+        border: none;
+        padding: 10px 20px;
+        color: white;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-custom:hover {
+        background-color: #45a049;
+    }
+
+
+    .image-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .image-grid-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .image-grid-item:hover {
+        transform: scale(1.05);
+    }
+
+    .image-grid-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .image-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow: hidden;
+        width: 100%;
+        height: 0;
+        transition: .5s ease;
+    }
+
+    .image-grid-item:hover .image-overlay {
+        height: 100%;
+    }
+
+    .overlay-text {
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .image-grid {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+    }
+</style>
+
+
+<section class="ftco-section">
     <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                        <thead class="thead-dark">
-                        <tr class="text-center">
-                            <th>상태</th>
-                            <th>총 금액</th>
-                            <th>송장번호</th>
-                            <th>수신인</th>
-                            <th>수신 번호</th>
-                            <th>배송 주소</th>
-                            <th>배송일</th>
-                            <th>직거래일</th>
-                            <th>상세보기</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="order : ${orderList}" class="text-center">
-                            <td th:text="${order.orderStatusId}"></td>
-                            <td th:text="${order.totalCost}"></td>
-                            <td th:text="${order.invoiceNumber}"></td>
-                            <td th:text="${order.receiverName}"></td>
-                            <td th:text="${order.receiverPhoneNumber}"></td>
-                            <td th:text="${order.receiverAddress()+' '+order.receiverAddressDetail()}"></td>
-                            <td th:text="${order.deliveryDate != null ? order.deliveryDate : '-'}"></td>
-                            <td th:text="${order.meetingAt != null ? #temporals.format(order.meetingAt, 'yyyy-MM-dd HH:mm') : '-'}"></td>
-                            <td>
-                                <a th:href="@{/order(id=${order.id})}" class="btn btn-primary btn-sm">상세보기</a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+        <div class="row justify-content-center">
+            <div class="col-xl-8 ftco-animate">
+                <div class="farm-info-card">
+                    <div class="farm-info-header">
+                        <h3 class="mb-0" th:text="${farm == null} ? '농가 등록' : '농가 정보'">농가 정보</h3>
+                    </div>
+
+                    <div class="farm-info-body">
+                        <!-- 농가 정보가 없는 경우: 등록 폼 표시 -->
+                        <form th:if="${farm == null}" action="/farm-post" method="POST" class="billing-form"
+                              enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="name">농가 이름</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요"
+                                       required>
+                            </div>
+                            <div class="form-group">
+                                <label for="detail">농가 소개</label>
+                                <textarea class="form-control" name="detail" id="detail" rows="8"
+                                          style="min-height: 200px; resize: vertical;"
+                                          placeholder="농가에 대한 자세한 소개를 입력하세요" required></textarea>
+                            </div>
+                            <div class="form-group mt-4">
+                                <button type="submit" class="btn btn-custom btn-block">농가 등록하기</button>
+                            </div>
+                        </form>
+
+                        <!-- 농가 정보가 있는 경우 -->
+                        <div th:if="${farm != null}" class="farm-info-display">
+                            <div class="farm-info-card">
+                                <div class="farm-info-content">
+                                    <h4 th:text="${farm.name}" class="farm-name">농가 이름</h4>
+                                    <div class="farm-detail-container">
+                                        <p th:text="${farm.detail}" class="farm-detail">농가 소개</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 이미지가 없는 경우 -->
+                            <div th:if="${#lists.isEmpty(farmImage)}" class="image-upload-form">
+                                <h5 class="mb-3">농가 이미지 등록</h5>
+                                <form th:action="@{/farm-image}" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <input type="file" name="images" multiple accept="image/*"
+                                               class="form-control-file">
+                                    </div>
+                                    <input type="hidden" name="id" th:value="${farm.id}">
+                                    <button type="submit" class="btn btn-custom">이미지 업로드</button>
+                                </form>
+                            </div>
+
+                            <div th:if="${not #lists.isEmpty(farmImage)}" class="image-upload-form">
+                                <div class="image-grid">
+                                    <div th:each="image : ${farmImage}" class="image-grid-item">
+                                        <img th:src="${image.img}" th:alt="'Farm Image'"/>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</section> <!-- .section -->
+</section>
 
 
 <footer class="ftco-footer ftco-section">
@@ -196,6 +391,7 @@
         </div>
     </div>
 </footer>
+
 
 <!-- loader -->
 <div id="ftco-loader" class="show fullscreen">
