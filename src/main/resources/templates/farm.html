@@ -262,12 +262,60 @@
                                 <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요"
                                        required>
                             </div>
+
+                            <div class="form-group">
+                                <label for="mainCrop">주요 작물</label>
+                                <input type="text" class="form-control" name="mainCrop" id="mainCrop"
+                                       placeholder="주로 재배하는 작물을 입력하세요" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="location">농가 위치</label>
+                                <input type="text" class="form-control" name="location" id="location"
+                                       placeholder="농가가 위치한 지역을 입력하세요" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="experience">농사 경력</label>
+                                <input type="text" class="form-control" name="experience" id="experience"
+                                       placeholder="농사를 지은 기간을 입력하세요. 예: 20년" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>자랑거리 (해당하는 항목에 체크해주세요)</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="features" id="eco"
+                                           value="친환경 농법 사용">
+                                    <label class="form-check-label" for="eco">친환경 농법 사용</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="features" id="family"
+                                           value="가족 대대로 이어온 농장">
+                                    <label class="form-check-label" for="family">가족 대대로 이어온 농장</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="features" id="certified"
+                                           value="품질 인증 보유">
+                                    <label class="form-check-label" for="certified">품질 인증 보유</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="features" id="direct"
+                                           value="직거래 판매">
+                                    <label class="form-check-label" for="direct">직거래 판매</label>
+                                </div>
+                            </div>
+
                             <div class="form-group">
                                 <label for="detail">농가 소개</label>
-                                <textarea class="form-control" name="detail" id="detail" rows="8"
-                                          style="min-height: 200px; resize: vertical;"
-                                          placeholder="농가에 대한 자세한 소개를 입력하세요" required></textarea>
+                                <div class="d-flex flex-column">
+        <textarea class="form-control mb-2" id="detail" name="detail" rows="6"
+                  style="min-height: 150px; resize: vertical;"
+                  placeholder="자동으로 생성된 소개글이 여기에 표시됩니다. 필요한 경우 직접 수정할 수 있습니다."></textarea>
+                                    <button type="button" class="btn btn-primary align-self-end" id="generateIntroBtn">소개글 자동 생성</button>
+                                </div>
                             </div>
+
+
                             <div class="form-group mt-4">
                                 <button type="submit" class="btn btn-custom btn-block">농가 등록하기</button>
                             </div>
@@ -421,41 +469,57 @@
 <script src="js/main.js"></script>
 
 <script>
-    $(document).ready(function () {
 
-        var quantitiy = 0;
-        $('.quantity-right-plus').click(function (e) {
+    document.getElementById('generateIntroBtn').addEventListener('click', function () {
+        var name = document.getElementById('name').value;
+        var mainCrop = document.getElementById('mainCrop').value;
+        var location = document.getElementById('location').value;
+        var experience = document.getElementById('experience').value;
+        var features = Array.from(document.querySelectorAll('input[name="features"]:checked')).map(el => el.value);
 
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
+        if (!name || !mainCrop || !location || !experience) {
+            alert('모든 필드를 입력해주세요.');
+            return;
+        }
 
-            // If is not undefined
+        var inputText = `농가 이름: ${name}, 주요 작물: ${mainCrop}, 위치: ${location}, 농사 경력: ${experience}, 특징: ${features.join(', ')}`;
 
-            $('#quantity').val(quantity + 1);
+        console.log('요청 보내는 중...');
+        console.log('입력된 정보:', inputText);
 
-
-            // Increment
-
-        });
-
-        $('.quantity-left-minus').click(function (e) {
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
-
-            // If is not undefined
-
-            // Increment
-            if (quantity > 0) {
-                $('#quantity').val(quantity - 1);
-            }
-        });
-
+        fetch('/api/gpt/farm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'model': 'gpt-4o',
+                'isProduct': 'false',
+                'input': inputText
+            })
+        })
+            .then(response => {
+                console.log('응답 상태:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('API 응답 데이터:', data);
+                if (data.response) {
+                    console.log('생성된 소개글:', data.response);
+                    document.getElementById('detail').value = data.response;
+                } else {
+                    console.error('응답에 예상된 데이터가 없습니다:', data);
+                    alert('소개글 생성에 실패했습니다. 응답 데이터가 올바르지 않습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('API 요청 중 오류 발생:', error);
+                alert('소개글 생성 중 오류가 발생했습니다.');
+            });
     });
 </script>
+
+
 
 </body>
 </html>
