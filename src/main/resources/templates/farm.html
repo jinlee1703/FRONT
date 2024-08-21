@@ -80,6 +80,100 @@
 
 <style>
 
+    /* input 태그 스타일 수정 */
+    .form-control {
+        font-size: 1.1rem;
+        color: #000000;  /* 입력 텍스트 색상을 검정색으로 변경 */
+        background-color: #ffffff;  /* 배경색을 흰색으로 변경 */
+        border: 2px solid #ced4da;  /* 테두리를 더 굵게 설정 */
+        border-radius: 5px;
+        padding: 12px 15px;  /* 패딩을 약간 증가 */
+        transition: all 0.3s ease;
+        font-weight: 500;  /* 글꼴 두께를 약간 증가 */
+    }
+
+    .form-control:focus {
+        border-color: #4CAF50;
+        box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+        background-color: #f8f8f8;  /* 포커스 시 배경색 약간 변경 */
+    }
+
+    .form-control::placeholder {
+        color: #adb5bd;
+        opacity: 1;
+    }
+
+    /* 라벨 스타일 수정 */
+    label {
+        font-weight: 600;
+        color: #333333;
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;  /* 라벨 크기 약간 증가 */
+    }
+
+    /* 입력 필드 hover 효과 */
+    .form-control:hover {
+        border-color: #4CAF50;
+    }
+
+    /* 체크박스 라벨 스타일 */
+    .form-check-label {
+        font-weight: normal;
+        color: #495057;
+    }
+
+    /* 버튼 스타일 수정 */
+    .btn-custom, .btn-primary {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+
+    body {
+        font-family: 'Open Sans', 'Nanum Gothic', sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    p {
+        margin-bottom: 1.2rem;
+    }
+
+    .nav-link {
+        font-size: 1.1rem;
+    }
+
+    .form-control {
+        font-size: 1rem;
+    }
+
+    .btn {
+        font-size: 1rem;
+        font-weight: 600;
+    }
+
+    .farm-name {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .farm-detail {
+        font-size: 1.1rem;
+        line-height: 1.8;
+    }
+
+    footer {
+        font-size: 0.9rem;
+    }
+
     .farm-info-card {
         background-color: #ffffff;
         border-radius: 10px;
@@ -259,7 +353,7 @@
                               enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="name">농가 이름</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요"
+                                <input type="text" class="form-control" name="name" id="name" placeholder="농가 이름을 입력하세요 "
                                        required>
                             </div>
 
@@ -282,26 +376,44 @@
                             </div>
 
                             <div class="form-group">
-                                <label>자랑거리 (해당하는 항목에 체크해주세요)</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="features" id="eco"
-                                           value="친환경 농법 사용">
-                                    <label class="form-check-label" for="eco">친환경 농법 사용</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="features" id="family"
-                                           value="가족 대대로 이어온 농장">
-                                    <label class="form-check-label" for="family">가족 대대로 이어온 농장</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="features" id="certified"
-                                           value="품질 인증 보유">
-                                    <label class="form-check-label" for="certified">품질 인증 보유</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="features" id="direct"
-                                           value="직거래 판매">
-                                    <label class="form-check-label" for="direct">직거래 판매</label>
+                                <label>농가의 특징 (해당하는 항목에 체크해주세요)</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="eco" value="친환경 농법 사용">
+                                            <label class="form-check-label" for="eco">친환경 농법 사용</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="family" value="가족 대대로 이어온 농장">
+                                            <label class="form-check-label" for="family">가족 대대로 이어온 농장</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="certified" value="품질 인증 보유">
+                                            <label class="form-check-label" for="certified">품질 인증 보유</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="direct" value="직거래 판매">
+                                            <label class="form-check-label" for="direct">직거래 판매</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="organic" value="유기농 재배">
+                                            <label class="form-check-label" for="organic">유기농 재배</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="speciality" value="특산품 재배">
+                                            <label class="form-check-label" for="speciality">특산품 재배</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="tech" value="스마트팜 기술 도입">
+                                            <label class="form-check-label" for="tech">스마트팜 기술 도입</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="experience" value="농촌 체험 프로그램 운영">
+                                            <label class="form-check-label" for="experience">농촌 체험 프로그램 운영</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
