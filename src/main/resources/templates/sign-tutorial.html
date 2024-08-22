@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>회원가입 연습 페이지</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script>
+        function validateName() {
+            var name = document.getElementById("name").value;
+            if (name === "") {
+                alert("이름을 입력해주세요.");
+                return false;
+            }
+            var confirmation = confirm(name + "이 본인의 이름이 맞나요?");
+            return confirmation;
+        }
+
+        function validatePhoneNumber() {
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            if (phoneNumber === "") {
+                alert("전화번호를 입력해주세요.");
+                return false;
+            }
+            var confirmation = confirm(phoneNumber + "이 본인의 전화번호가 맞나요?");
+            return confirmation;
+        }
+
+        function validatePassword() {
+            var password = document.getElementById("password").value;
+            if (password === "") {
+                alert("비밀번호를 입력해주세요.");
+                return false;
+            }
+            var confirmation = confirm("입력한 비밀번호가 맞나요?");
+            return confirmation;
+        }
+
+        function validateSellerStatus() {
+            var isSeller = document.getElementById("isSeller").value;
+            var confirmation = confirm(isSeller + "로 설정하신 것이 맞나요?");
+            if (!confirmation) {
+                document.getElementById("isSeller").value = ""; // 초기화
+            }
+            return confirmation;
+        }
+
+        function validateAccountNumber() {
+            var accountNumber = document.getElementById("accountNumber").value;
+            if (accountNumber === "") {
+                alert("계좌번호를 입력해주세요.");
+                return false;
+            }
+            var confirmation = confirm(accountNumber + "이 본인의 계좌번호가 맞나요?");
+            return confirmation;
+        }
+
+        function showNextField(fieldId) {
+            document.getElementById(fieldId).style.display = "block";
+        }
+
+        function hideField(fieldId) {
+            document.getElementById(fieldId).style.display = "none";
+        }
+
+        function handleNextButton(validationFunction, nextFieldId, currentFieldId) {
+            var isValid = validationFunction();
+            if (isValid) {
+                document.getElementById(currentFieldId).querySelector('.btn-primary').style.display = 'none'; // 현재 필드의 다음 버튼 숨김
+                var previousButton = document.getElementById(currentFieldId).querySelector('.btn-secondary');
+                if (previousButton) previousButton.style.display = 'none'; // 현재 필드의 이전 버튼 숨김
+
+                showNextField(nextFieldId);  // 다음 필드를 표시
+            }
+        }
+
+        function handlePreviousButton(previousFieldId, currentFieldId) {
+            hideField(currentFieldId);
+            document.getElementById(previousFieldId).querySelector('.btn-primary').style.display = 'block'; // 이전 필드의 다음 버튼 보이기
+
+            var previousButton = document.getElementById(previousFieldId).querySelector('.btn-secondary');
+            if (previousButton) previousButton.style.display = 'block'; // 이전 필드의 이전 버튼 보이기
+
+            showNextField(previousFieldId);
+        }
+
+        function handleSubmit() {
+            alert("회원가입 연습이 끝났습니다.");
+            alert("홈페이지로 이동합니다.");
+            window.location.href = "/";
+            return false; // 폼 제출 방지
+        }
+    </script>
+</head>
+<body>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 ftco-animate">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">회원가입 연습</h3>
+                    </div>
+                    <div class="card-body">
+                        <form onsubmit="return handleSubmit();" method="POST" class="billing-form">
+                            <div class="form-group" id="nameField">
+                                <label for="name">이름</label>
+                                <input type="text" class="form-control" name="name" id="name"
+                                       placeholder="본인의 이름을 입력하세요. 예시: 김철수,김영희">
+                                <button type="button" class="btn btn-primary mt-2"
+                                        onclick="handleNextButton(validateName, 'phoneField', 'nameField')">다음으로
+                                </button>
+                            </div>
+                            <div class="form-group" id="phoneField" style="display: none; margin-top: 20px;">
+                                <label for="phoneNumber">전화번호</label>
+                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
+                                       placeholder="전화번호를 입력하세요. '-' 없이 01012345678">
+                                <button type="button" class="btn btn-primary mt-2"
+                                        onclick="handleNextButton(validatePhoneNumber, 'passwordField', 'phoneField')">
+                                    다음으로
+                                </button>
+                                <button type="button" class="btn btn-secondary mt-2"
+                                        onclick="handlePreviousButton('nameField', 'phoneField')">이전으로
+                                </button>
+                            </div>
+                            <div class="form-group" id="passwordField" style="display: none; margin-top: 20px;">
+                                <label for="password">비밀번호</label>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="비밀번호를 입력하세요.">
+                                <button type="button" class="btn btn-primary mt-2"
+                                        onclick="handleNextButton(validatePassword, 'sellerField', 'passwordField')">
+                                    다음으로
+                                </button>
+                                <button type="button" class="btn btn-secondary mt-2"
+                                        onclick="handlePreviousButton('phoneField', 'passwordField')">이전으로
+                                </button>
+                            </div>
+                            <div class="form-group" id="sellerField" style="display: none; margin-top: 20px;">
+                                <label for="isSeller">판매자 여부</label>
+                                <select id="isSeller" name="isSeller" class="form-control">
+                                    <option value="'예'">예</option>
+                                    <option value="'아니요'" selected>아니요</option>
+                                </select>
+                                <button type="button" class="btn btn-primary mt-2"
+                                        onclick="handleNextButton(validateSellerStatus, 'accountField', 'sellerField')">
+                                    다음으로
+                                </button>
+                                <button type="button" class="btn btn-secondary mt-2"
+                                        onclick="handlePreviousButton('passwordField', 'sellerField')">이전으로
+                                </button>
+                            </div>
+                            <div class="form-group" id="accountField" style="display: none; margin-top: 20px;">
+                                <label for="accountNumber">계좌번호</label>
+                                <input type="text" class="form-control" id="accountNumber" name="accountNumber"
+                                       placeholder="계좌번호를 입력하세요. 예시: 987654321">
+                                <button type="submit" class="btn btn-success btn-block mt-2">제출</button>
+                                <button type="button" class="btn btn-secondary mt-2"
+                                        onclick="handlePreviousButton('sellerField', 'accountField')">이전으로
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> <!-- .section -->
+
+</body>
+</html>

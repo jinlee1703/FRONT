@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * class: ChatGptController.
  *
@@ -41,16 +45,35 @@ public class GptController {
 
     @PostMapping("/chat")
     public String chat(
-        @NotNull @RequestParam("model") String model,
-        @NotNull @RequestParam("isProduct") boolean isProduct,
-        Model view, @NotNull @RequestParam("input") String... input) {
+            @NotNull @RequestParam("model") String model,
+            @NotNull @RequestParam("isProduct") boolean isProduct,
+            Model view, @NotNull @RequestParam("input") String... input) {
 
         // 서비스 호출
 
         // 필요한 데이터를 모델에 추가
         view.addAttribute("gpt",
-            chatGPTService.chat(model, endpointCharged, isProduct, input));  // 추가 데이터 예시
-        if(isProduct) return "fragments/modalContent :: modalContentFragment";  // 타임리프 조각을 반환
+                chatGPTService.chat(model, endpointCharged, isProduct, input));  // 추가 데이터 예시
+        if (isProduct) {
+            return "fragments/modalContent :: modalContentFragment";  // 타임리프 조각을 반환
+        }
         return "farm 알아서 처리하세요";
     }
+
+    @PostMapping("/farm")
+    public ResponseEntity<Map<String, String>> farmChat(
+            @NotNull @RequestParam("model") String model,
+            @NotNull @RequestParam("isProduct") boolean isProduct,
+            @NotNull @RequestParam("input") String input) {
+
+
+        String response = chatGPTService.farmChat(model, endpointCharged, isProduct, input);
+        System.out.println("결과 값: " + response);
+
+        Map<String, String> result = new HashMap<>();
+        result.put("response", response);
+
+        return ResponseEntity.ok(result);
+    }
+
 }

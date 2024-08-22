@@ -27,6 +27,11 @@ public class UserController {
 
     private final UserAdaptor userAdaptor;
 
+    @GetMapping("/sign-tutorial")
+    public String tutorialSignup() {
+        return "sign-tutorial";
+    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "login";
@@ -163,13 +168,21 @@ public class UserController {
 
         FarmResponse farmResponse = userAdaptor.getFarm(id);
 
-        List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
+        if (farmResponse != null) {
+            List<ImageResponse> farmImage = userAdaptor.getFarmImage(farmResponse.getId());
+            // sequence대로 정렬
+            farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+            farmResponse.setDetail(farmResponse.getDetail().replace("\n", "<br>"));
+            model.addAttribute("farmImage", farmImage);
+        }
 
-        // sequence대로 정렬
-        farmImage.sort(Comparator.comparingInt(ImageResponse::getSequence));
+
+
+
+
+
 
         model.addAttribute("farm", farmResponse);
-        model.addAttribute("farmImage", farmImage);
 
         return "farm";
     }
