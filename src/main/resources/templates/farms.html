@@ -7,27 +7,26 @@
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
 
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
 
-    <link rel="stylesheet" href="css/aos.css">
+    <link rel="stylesheet" href="/css/aos.css">
 
-    <link rel="stylesheet" href="css/ionicons.min.css">
+    <link rel="stylesheet" href="/css/ionicons.min.css">
 
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="/css/jquery.timepicker.css">
 
 
-    <link rel="stylesheet" href="css/flaticon.css">
-    <link rel="stylesheet" href="css/icomoon.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="goto-here">
-
 <!--회원가입, 로그인, 로그아웃, 마이페이지-->
 <div class="container user-head" th:if="${login}">
 
@@ -46,7 +45,7 @@
 <!--검색창-->
 <div class="container" style="display: flex; justify-content: space-between; align-items: center">
     <a class="navbar-brand" href="/"><img src="/images/logo.png" alt="logo" class="logo-img"></a>
-    <form action="/search" method="get" class="search-container" style="height: 100%">
+    <form action="/search" class="search-container" style="height: 100%">
         <input class="search-input" name="search_word" type="text" placeholder="">
         <button class="search-button" type="submit">검색</button>
     </form>
@@ -76,58 +75,49 @@
             </ul>
         </div>
     </div>
+</nav>
+<!-- END nav -->
 
-</nav><!-- END nav -->
-
-
-<section class="ftco-section">
+<section class="ftco-section bg-light">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-xl-8 ftco-animate">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-success text-white">
-                        <h3 class="mb-0">회원가입</h3>
+        <div class="row" style="justify-content: center">
+            <div class="col-md-8 col-lg-10 order-md-last">
+                <div th:if="${search}">
+                    <h2 th:text="'\''+${search}+'\' 검색 결과'"></h2>
+                </div>
+                <div th:if="${farms.totalElements eq 0}">등록된 농가가 존재하지 않습니다.</div>
+                <div class="row" th:unless="${farms.totalElements eq 0}">
+                    <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex" th:each="farm: ${farms.content}">
+                        <div class="product d-flex flex-column">
+                            <a th:href="${'/farms/'+farm.id}" class="img-prod">
+                                <img class="img-thumbnail" th:src="${farm.img}" alt="farm image">
+                                <div class="overlay"></div>
+                            </a>
+                            <div class="text py-3 pb-4 px-3">
+                                <h3><a th:href="${'/farms/'+farm.id}" th:text="${farm.name}"></a></h3>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form action="/sign" method="POST" class="billing-form">
-                            <div class="form-group">
-                                <label for="name">이름</label>
-                                <input type="text" class="form-control" name="name" id="name" placeholder="이름을 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phoneNumber">전화번호</label>
-                                <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="01012345678 형식으로 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">비밀번호</label>
-                                <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호를 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="isSeller">판매자 여부</label>
-                                <select id="isSeller" name="isSeller" class="form-control">
-                                    <option value="yes">예</option>
-                                    <option value="no">아니요</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="accountNumber">계좌번호</label>
-                                <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력하세요" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-block">제출</button>
-                            </div>
-                        </form>
+                </div>
+                <div class="row mt-5" th:if="${farms.totalElements ne 0}">
+                    <div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                                <li><a href="#">&lt;</a></li>
+                                <li th:classappend="${page eq 0}?'active':''"><a th:href="'/farms?page=0'">1</a></li>
+                                <li th:classappend="${page eq 1}?'active':''"><a th:href="'/farms?page=1'">2</a></li>
+                                <li th:classappend="${page eq 2}?'active':''"><a th:href="'/farms?page=2'">3</a></li>
+                                <li th:classappend="${page eq 3}?'active':''"><a th:href="'/farms?page=3'">4</a></li>
+                                <li th:classappend="${page eq 4}?'active':''"><a th:href="'/farms?page=4'">5</a></li>
+                                <li><a href="#">&gt;</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</section> <!-- .section -->
-
-
-
-
-
+</section>
 
 <footer class="ftco-footer ftco-section">
     <div class="container">
@@ -217,59 +207,22 @@
 </div>
 
 
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery-migrate-3.0.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/jquery.easing.1.3.js"></script>
-<script src="js/jquery.waypoints.min.js"></script>
-<script src="js/jquery.stellar.min.js"></script>
-<script src="js/owl.carousel.min.js"></script>
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/aos.js"></script>
-<script src="js/jquery.animateNumber.min.js"></script>
-<script src="js/bootstrap-datepicker.js"></script>
-<script src="js/scrollax.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.stellar.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/aos.js"></script>
+<script src="/js/jquery.animateNumber.min.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/scrollax.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-<script src="js/google-map.js"></script>
-<script src="js/main.js"></script>
-
-<script>
-    $(document).ready(function () {
-
-        var quantitiy = 0;
-        $('.quantity-right-plus').click(function (e) {
-
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
-
-            // If is not undefined
-
-            $('#quantity').val(quantity + 1);
-
-
-            // Increment
-
-        });
-
-        $('.quantity-left-minus').click(function (e) {
-            // Stop acting like a button
-            e.preventDefault();
-            // Get the field name
-            var quantity = parseInt($('#quantity').val());
-
-            // If is not undefined
-
-            // Increment
-            if (quantity > 0) {
-                $('#quantity').val(quantity - 1);
-            }
-        });
-
-    });
-</script>
+<script src="/js/google-map.js"></script>
+<script src="/js/main.js"></script>
 
 </body>
 </html>

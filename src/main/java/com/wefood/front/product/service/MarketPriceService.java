@@ -119,7 +119,22 @@ public class MarketPriceService {
             }
         }
 
-        return response.getData().getItem().stream().filter(item -> item.getItem_code().equals(String.valueOf(itemId))).toList();
+        return response.getData().getItem().stream().filter(item -> item.getItem_code().equals(String.valueOf(itemId)) && !item.getDpr2().equals("-")).toList();
+    }
+
+    public List<MarketPriceItemResponse> findMarketPriceByItemId(Long itemId, List<MarketPriceResponse> marketPriceResponses) {
+        MarketPriceResponse response;
+        switch (String.valueOf(itemId).charAt(0)) {
+            case '1' -> response = marketPriceResponses.get(3);
+            case '2' -> response = marketPriceResponses.get(0);
+            case '4' -> response = marketPriceResponses.get(1);
+            case '9' -> response = marketPriceResponses.get(2);
+            default -> {
+                return null;
+            }
+        }
+
+        return response.getData().getItem().stream().filter(item -> item.getItem_code().equals(String.valueOf(itemId)) && !item.getDpr2().equals("-")).toList();
     }
 
     private String getCookieByName(String name, Cookie[] cookies) {
