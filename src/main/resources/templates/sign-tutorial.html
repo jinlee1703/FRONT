@@ -6,6 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script>
+
+
+        function validateAllFields() {
+            var name = document.getElementById("name").value;
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var password = document.getElementById("password").value;
+            var isSeller = document.getElementById("isSeller").value;
+            var accountNumber = document.getElementById("accountNumber").value;
+
+            if (name === "" || phoneNumber === "" || password === "" || isSeller === "" || accountNumber === "") {
+                alert("다음으로를 입력해주세요.");
+                return false;
+            }
+            return true;
+        }
+
         function validateName() {
             var name = document.getElementById("name").value;
             if (name === "") {
@@ -85,6 +101,9 @@
         }
 
         function handleSubmit() {
+            if (!validateAllFields()) {
+                return false;
+            }
             alert("회원가입 연습이 끝났습니다.");
             alert("홈페이지로 이동합니다.");
             window.location.href = "/";
@@ -166,6 +185,8 @@
         </div>
     </div>
 </section> <!-- .section -->
+
+
 
 </body>
 </html>
