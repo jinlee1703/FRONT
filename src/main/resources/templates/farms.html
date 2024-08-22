@@ -80,12 +80,13 @@
 
 <section class="ftco-section bg-light">
     <div class="container">
-        <div class="row">
+        <div class="row" style="justify-content: center">
             <div class="col-md-8 col-lg-10 order-md-last">
                 <div th:if="${search}">
                     <h2 th:text="'\''+${search}+'\' 검색 결과'"></h2>
                 </div>
-                <div class="row">
+                <div th:if="${farms.totalElements eq 0}">등록된 농가가 존재하지 않습니다.</div>
+                <div class="row" th:unless="${farms.totalElements eq 0}">
                     <div class="col-sm-12 col-md-12 col-lg-4 ftco-animate d-flex" th:each="farm: ${farms.content}">
                         <div class="product d-flex flex-column">
                             <a th:href="${'/farms/'+farm.id}" class="img-prod">
@@ -98,66 +99,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-5">
+                <div class="row mt-5" th:if="${farms.totalElements ne 0}">
                     <div class="col text-center">
                         <div class="block-27">
                             <ul>
                                 <li><a href="#">&lt;</a></li>
-                                <li th:classappend="${page eq 0}?'active':''"><a th:href="'/farms?page=0'">1</a></li>
+                                <li class="active" th:classappend="${page eq 0}?'active':''"><a th:href="'/farms?page=0'">1</a></li>
                                 <li th:classappend="${page eq 1}?'active':''"><a th:href="'/farms?page=1'">2</a></li>
                                 <li th:classappend="${page eq 2}?'active':''"><a th:href="'/farms?page=2'">3</a></li>
                                 <li th:classappend="${page eq 3}?'active':''"><a th:href="'/farms?page=3'">4</a></li>
                                 <li th:classappend="${page eq 4}?'active':''"><a th:href="'/farms?page=4'">5</a></li>
                                 <li><a href="#">&gt;</a></li>
                             </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 col-lg-2">
-                <div class="sidebar">
-                    <div class="sidebar-box-2">
-                        <h2 class="heading">전체 카테고리</h2>
-                        <div class="fancy-collapse-panel">
-                            <div class="panel-group">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/1" th:classappend="${categoryId eq 1}?'category-active':'category-inactive'">
-                                                신선 채소
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/2" th:classappend="${categoryId eq 2}?'category-active':'category-inactive'">
-                                                신선 과일
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/3" th:classappend="${categoryId eq 3}?'category-active':'category-inactive'">
-                                                축산물
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h4 class="panel-title">
-                                            <a href="/search/category/4" th:classappend="${categoryId eq 4}?'category-active':'category-inactive'">
-                                                가공식품
-                                            </a>
-                                        </h4>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ public class FarmController {
     }
 
     @GetMapping("/{id}")
-    public String getFarm(@PathVariable("id") Long id, Model model, @CookieValue(name = "isSeller") Boolean isSeller, @RequestParam(name = "page", required = false) Long page, @RequestParam(name = "size", required = false) Long size) {
+    public String getFarm(@PathVariable("id") Long id, Model model, @CookieValue(name = "isSeller", required = false) Boolean isSeller, @RequestParam(name = "page", required = false) Long page, @RequestParam(name = "size", required = false) Long size) {
         FarmResponse farm = farmService.getFarm(id);
         List<ImageResponse> farmImage = userAdaptor.getFarmImage(id);
 
