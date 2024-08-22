@@ -50,7 +50,7 @@ public class CartController {
             model.addAttribute("addressResponse", addressResponse);
         }
 
-        return "/cart";
+        return "cart";
     }
 
     @PostMapping

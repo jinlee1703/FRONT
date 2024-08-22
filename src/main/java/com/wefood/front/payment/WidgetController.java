@@ -193,7 +193,7 @@ public class WidgetController {
         // todo 장바구니에있는 쿠기 가지고 orderDetail만들어
         // todo 장바구니 쿠키 지워버려
         // todo 그럼 결제완료 -> 주문생성 -> 주문디테일까지 완료
-        return "/success";
+        return "success";
     }
 
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
@@ -286,7 +286,7 @@ public class WidgetController {
         model.addAttribute("code", failCode);
         model.addAttribute("message", failMessage);
 
-        return "/fail";
+        return "fail";
     }
 
     @GetMapping("/payment/clear")

@@ -34,7 +34,7 @@ public class ProductController {
     public String index(Model model) {
         List<ProductResponse> products = productService.getProducts();
         model.addAttribute("products", products);
-        return "/index";
+        return "index";
     }
 
     @GetMapping("/search/category/{categoryId}")
@@ -44,7 +44,7 @@ public class ProductController {
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("page", page);
 
-        return "/shop";
+        return "shop";
     }
 
     @GetMapping("/{productId}")
@@ -78,7 +78,7 @@ public class ProductController {
             AddressResponse addressResponse = userAdaptor.findAddress(id);
             model.addAttribute("addressResponse", addressResponse);
         }
-        return "/product-single";
+        return "product-single";
     }
 
     @GetMapping("/search")
@@ -88,6 +88,6 @@ public class ProductController {
         model.addAttribute("search", searchWord);
         model.addAttribute("products", productsBySearch);
         model.addAttribute("page", page);
-        return "/shop";
+        return "shop";
     }
 }

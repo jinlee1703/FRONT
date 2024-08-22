@@ -39,6 +39,6 @@ public class MarketPriceController {
             model.addAttribute("items3", marketPriceService.readValue(marketPriceService.decompress(price3)));
         }
 
-        return "/market-price";
+        return "market-price";
     }
 }
