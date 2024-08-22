@@ -30,6 +30,7 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-parameter-store:3.1.0'
 }
 
 tasks.named('test') {
