@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>우리음식 :: 농가와 소비자를 잇다</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', 'Nanum Gothic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .form-group {
+            margin-top: 20px;
+        }
+
+        .btn-custom {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .btn-custom:hover {
+            background-color: #45a049;
+        }
+
+        #navigationButtons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 ftco-animate">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">농가 등록</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="farmRegistrationForm" action="/farm-post" method="POST" class="billing-form"
+                              enctype="multipart/form-data">
+                            <div class="form-group" id="nameField">
+                                <label for="name">농가 이름</label>
+                                <input type="text" class="form-control" name="name" id="name"
+                                       placeholder="농가 이름을 입력하는 칸입니다. 예시로 '철수네'를 입력해 주세요" required>
+                            </div>
+
+                            <div class="form-group" id="mainCropField">
+                                <label for="mainCrop">주요 상품</label>
+                                <input type="text" class="form-control" name="mainCrop" id="mainCrop"
+                                       placeholder="주로 판매하는 상품을 입력하는 칸입니다. 예시로 '감자,소고기'를 입력해 주세요" required>
+                            </div>
+
+                            <div class="form-group" id="locationField">
+                                <label for="location">농가 위치</label>
+                                <input type="text" class="form-control" name="location" id="location"
+                                       placeholder="농가가 위치한 지역을 입력하는 칸입니다. 예시로 '강원도 춘천'을 입력해 주세요" required>
+                            </div>
+
+                            <div class="form-group" id="experienceField">
+                                <label for="experience">농사 경력</label>
+                                <input type="text" class="form-control" name="experience" id="experience"
+                                       placeholder="농사를 지은 기간을 입력하는 칸입니다. 예시로 '20년'을 입력해 주세요" required>
+                            </div>
+
+                            <div class="form-group" id="featuresField">
+                                <label>농가의 특징 ('친환경 농법 사용'과 '품질 인증 보유' 항목에 체크해주세요)</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="eco"
+                                                   value="친환경 농법 사용">
+                                            <label class="form-check-label" for="eco">친환경 농법 사용</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="family"
+                                                   value="가족 대대로 이어온 농장">
+                                            <label class="form-check-label" for="family">가족 대대로 이어온 농장</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="certified" value="품질 인증 보유">
+                                            <label class="form-check-label" for="certified">품질 인증 보유</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="direct"
+                                                   value="직거래 판매">
+                                            <label class="form-check-label" for="direct">직거래 판매</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="organic"
+                                                   value="유기농 재배">
+                                            <label class="form-check-label" for="organic">유기농 재배</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="speciality" value="특산품 재배">
+                                            <label class="form-check-label" for="speciality">특산품 재배</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features" id="tech"
+                                                   value="스마트팜 기술 도입">
+                                            <label class="form-check-label" for="tech">스마트팜 기술 도입</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="features"
+                                                   id="experience" value="농촌 체험 프로그램 운영">
+                                            <label class="form-check-label" for="experience">농촌 체험 프로그램 운영</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="detailField">
+                                <label for="detail">농가 소개</label>
+                                <div class="d-flex flex-column">
+                                    <textarea class="form-control mb-2" id="detail" name="detail" rows="6"
+                                              style="min-height: 150px; resize: vertical;"
+                                              placeholder="자동으로 생성된 소개글이 여기에 표시됩니다. 필요한 경우 직접 수정할 수 있습니다."></textarea>
+                                    <button type="button" class="btn btn-primary align-self-end" id="generateIntroBtn">
+                                        소개글 자동 생성
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="navigationButtons">
+                                <button type="submit" class="btn btn-success" id="submitButton">농가 등록하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    document.getElementById('farmRegistrationForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!validateAllFields()) {
+            return;
+        }
+
+        alert("농가등록 연습이 완료됐습니다. 홈페이지로 돌아갑니다");
+        window.location.href = "/";
+    });
+
+    function validateAllFields() {
+        var fields = ['name', 'mainCrop', 'location', 'experience'];
+
+        for (var i = 0; i < fields.length; i++) {
+            if (!validateField(fields[i])) {
+                return false;
+            }
+        }
+        if (!validateFeatures()) {
+            return false;
+        }
+
+        var fields2 = ['detail'];
+        return validateField(fields2);
+    }
+
+    function validateAllFields2() {
+        var fields = ['name', 'mainCrop', 'location', 'experience'];
+        for (var i = 0; i < fields.length; i++) {
+            if (!validateField(fields[i])) {
+                return false;
+            }
+        }
+        return validateFeatures();
+    }
+
+
+    function validateField(fieldId) {
+        var field = document.getElementById(fieldId);
+
+        switch (fieldId) {
+            case 'name':
+                if (field.value !== '철수네') {
+                    alert('농가 이름이 올바르지 않습니다. 예시대로 "철수네"를 입력해주세요.');
+                    return false;
+                }
+                break;
+            case 'mainCrop':
+                if (field.value !== '감자,소고기') {
+                    alert('주요 상품이 올바르지 않습니다. 예시대로 "감자,소고기"를 입력해주세요.');
+                    return false;
+                }
+                break;
+            case 'location':
+                if (field.value !== '강원도 춘천') {
+                    alert('농가 위치가 올바르지 않습니다. 예시대로 "강원도 춘천"을 입력해주세요.');
+                    return false;
+                }
+                break;
+            case 'experience':
+                if (field.value !== '20년') {
+                    alert('농사 경력이 올바르지 않습니다. 예시대로 "20년"을 입력해주세요.');
+                    return false;
+                }
+                break;
+        }
+
+        if (field.value.trim() === "") {
+            if (fieldId === 'detail') {
+                alert('농가 소개를 입력해주세요.');
+            } else {
+                alert(field.placeholder);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateFeatures() {
+        var checkedFeatures = document.querySelectorAll('input[name="features"]:checked');
+        if (checkedFeatures.length !== 2 ||
+            !Array.from(checkedFeatures).some(el => el.value === "친환경 농법 사용") ||
+            !Array.from(checkedFeatures).some(el => el.value === "품질 인증 보유")) {
+            alert("'친환경 농법 사용'과 '품질 인증 보유' 항목을 체크해주세요.");
+            return false;
+        }
+        return true;
+    }
+
+    document.getElementById('generateIntroBtn').addEventListener('click', function () {
+        if (!validateAllFields2()) {
+            return;
+        }
+
+
+        var generatedIntro = '안녕하세요! 강원도 춘천에서 감자와 소고기를 재배하고 있는 철수네 농가입니다. 저희는 20년 동안 농사를 지으며 친환경 농법을 고수하고 있어요. 그래서 건강하고 맛있는 농산물을 제공할 수 있죠. 또한, 품질 인증까지 받았답니다! 철수네 농산물은 언제나 믿고 드실 수 있어요. 많은 관심과 사랑 부탁드립니다!';
+        document.getElementById('detail').value = generatedIntro;
+    });
+</script>
+
+</body>
+</html>

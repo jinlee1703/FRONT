@@ -32,6 +32,11 @@ public class UserController {
         return "sign-tutorial";
     }
 
+    @GetMapping("/farm-tutorial")
+    public String tutorialFarm() {
+        return "farm-tutorial";
+    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "login";
@@ -175,12 +180,6 @@ public class UserController {
             farmResponse.setDetail(farmResponse.getDetail().replace("\n", "<br>"));
             model.addAttribute("farmImage", farmImage);
         }
-
-
-
-
-
-
 
         model.addAttribute("farm", farmResponse);
 
