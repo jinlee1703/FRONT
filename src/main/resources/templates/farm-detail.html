@@ -311,8 +311,8 @@
                     <div class="col text-center">
                         <div class="block-27">
                             <ul>
-                                <li><a th:href="${page gt 0}?'/farms/'+${farm.id}+'?page='+${page}-1:'/farms/'+${farm.id}+'?page='+${page}">&lt;</a></li>
-                                <li class="active" th:classappend="${page eq 0}?'active':''">
+                                <li><a th:href="${page gt 0}?'/farms/'+${farm.id}+'?page='+(${page}-1):'/farms/'+${farm.id}+'?page='+${page}">&lt;</a></li>
+                                <li th:classappend="${page eq 0}?'active':''">
                                     <a th:href="'/farms/'+${farm.id}+'?page=0'">1</a></li>
                                 <li th:classappend="${page eq 1}?'active':''">
                                     <a th:href="'/farms/'+${farm.id} + '?page=1'">2</a></li>
@@ -322,7 +322,7 @@
                                     <a th:href="'/farms/'+${farm.id}+'?page=3'">4</a></li>
                                 <li th:classappend="${page eq 4}?'active':''">
                                     <a th:href="'/farms/'+${farm.id}+'?page=4'">5</a></li>
-                                <li><a th:href="${page lt 5}?'/farms/'+${farm.id}+'?page='+${page}+1:'/farms/'+${farm.id}+'?page='+${page}">&gt;</a></li>
+                                <li><a th:href="${page lt 5}?'/farms/'+${farm.id}+'?page='+(${page}+1):'/farms/'+${farm.id}+'?page='+${page}">&gt;</a></li>
                             </ul>
                         </div>
                     </div>
