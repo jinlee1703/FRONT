@@ -50,13 +50,15 @@ public class ProductController {
     @GetMapping("/{productId}")
     public String productDetail(@PathVariable(name = "productId") Long productId, Model model, @CookieValue(name = "name", required = false) String name, @CookieValue(name = "phoneNumber", required = false) String phoneNumber, @CookieValue(name = "id", required = false) Long id, HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "price0", required = false) String item) {
         ProductDetailResponse productDetail = productService.getProductDetail(productId);
-
+        List<MarketPriceItemResponse> marketPrice;
 
         if (item == null) {
             List<MarketPriceResponse> marketPriceResponses = marketPriceService.saveMarketPrice(response, "price");
+            marketPrice = marketPriceService.findMarketPriceByItemId(productDetail.getItemId(), marketPriceResponses);
 
+        } else {
+            marketPrice = marketPriceService.getMarketPriceCookie(productDetail.getItemId(), request.getCookies());
         }
-        List<MarketPriceItemResponse> marketPrice = marketPriceService.getMarketPriceCookie(productDetail.getItemId(), request.getCookies());
 
         List<ReviewGetResponse> list = orderAdaptor.findProductReview(productId);
         model.addAttribute("marketPrices", marketPrice);
